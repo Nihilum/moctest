@@ -22,9 +22,9 @@
  */
 
 /**
- * @file tests/FindTest/TestFindTest.cpp
+ * @file tests/FindRegTest/TestFindRegTest.cpp
  *
- * @desc Tests used to check correctness of FindTest functor.
+ * @desc Tests used to check correctness of FindRegTest functor.
  */
 
 #include <vector>
@@ -34,34 +34,42 @@
 #include <cppunit/ui/text/TestRunner.h>
 
 #include <moctest/FindTest.hpp>
+#include <moctest/FindRegTest.hpp>
 
-#include "TestFindTest.hpp"
+#include "TestFindRegTest.hpp"
 
-void TestFindTest::setUp()
+void TestFindRegTest::setUp()
 {
 }
 
-void TestFindTest::tearDown()
+void TestFindRegTest::tearDown()
 {
 }
 
-void TestFindTest::test_find_test()
+void TestFindRegTest::test_find_regtest()
 {
-    moctest::FindTest test_finder;
-    std::vector<std::string> vec_tests { "All Tests",
-                                         "TestFindTest", "TestFindTest::test_find_test",
-                                         "TestOne", "TestOne::underlying_test_one", "TestOne::underlying_test_two", "TestOne::underlying_test_three",
-                                         "TestTwo", "TestTwo::underlying_test_one", "TestTwo::underlying_test_two", "TestTwo::underlying_test_three"
+    moctest::FindRegTest regtest_finder;
+    std::vector<std::string> vec_tests {
+                                         "TestOne::underlying_test_one", "TestOne::underlying_test_two", "TestOne::underlying_test_three",
+                                         "TestTwo::underlying_test_one", "TestTwo::underlying_test_two", "TestTwo::underlying_test_three"
                                        };
+    auto found_tests = regtest_finder(".*underlying.*", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
 
-    std::for_each(vec_tests.begin(), vec_tests.end(), [&](const std::string& test_name) {
-        CPPUNIT_NS::Test* test = test_finder(test_name, CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, false, test == nullptr);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, test_name, test->getName());
+    std::for_each(found_tests.begin(), found_tests.end(), [&](CPPUNIT_NS::Test* test) {
+        CPPUNIT_ASSERT_EQUAL(false, test == nullptr);
+
+        bool found = false;
+        for (auto& test_name : vec_tests) {
+            if (test_name == test->getName()) {
+                found = true;
+            }
+        }
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(test->getName(), true, found);
     });
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(TestFindTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(TestFindRegTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestOne);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTwo);
 
@@ -76,7 +84,7 @@ int main(int argc, char* argv[])
     controller.addListener(&progress);
 
     moctest::FindTest test_finder;
-    CPPUNIT_NS::Test* find_test = test_finder("TestFindTest::test_find_test", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    CPPUNIT_NS::Test* find_test = test_finder("TestFindRegTest::test_find_regtest", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(find_test);
     runner.run(controller);

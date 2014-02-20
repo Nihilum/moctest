@@ -41,8 +41,6 @@ namespace boost
 
 namespace program_options
 {
-    class options_description;
-    class positional_options_description;
     class variables_map;
 }
 
@@ -64,14 +62,17 @@ public:
     bool asked_for_help() const;
     bool asked_for_list() const;
     bool asked_to_run_only_some_tests() const;
+    bool asked_for_regtest() const;
 
     const std::vector<std::string>& get_tests_to_run() const { return m_tests; }
+    const std::string& get_regtest() const { return m_regtest; }
 
 protected:
     int m_argc;
     char** m_argv;
     std::unique_ptr<po::variables_map> m_vm;
     std::vector<std::string> m_tests;
+    std::string m_regtest;
 };
 
 }

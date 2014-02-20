@@ -22,38 +22,52 @@
  */
 
 /**
- * @file moctest/ListTests.hpp
+ * @file src/FindRegTest.cpp
  *
- * @desc Tests listing functor.
+ * @desc FindRegTest functor.
  */
 
-#ifndef MOCTEST_LISTTESTS_HPP
-#define MOCTEST_LISTTESTS_HPP
-
 #include <cstdint>
-#include <sstream>
 
-#include <moctest/Config.hpp>
+#include <cppunit/Test.h>
 
-namespace CPPUNIT_NS
-{
-    class Test;
-}
+#include <moctest/FindRegTest.hpp>
 
 namespace moctest
 {
 
-class MOCTEST_DLL_PUBLIC ListTests
+std::vector<CPPUNIT_NS::Test*> FindRegTest::operator()(const std::string& reg_expr, CPPUNIT_NS::Test* test)
 {
-public:
-    ListTests();
+    if (reg_expr.empty() || !test) {
+        return std::vector<CPPUNIT_NS::Test*>();
+    }
 
-    void operator()(std::stringstream& sStr, CPPUNIT_NS::Test* test, uint16_t tabs = 0);
-
-protected:
-    bool m_top_level;
-};
-
+    std::regex expr(reg_expr);
+    return internal_find(expr, test);
 }
 
-#endif // MOCTEST_LISTTESTS_HPP
+std::vector<CPPUNIT_NS::Test*> FindRegTest::internal_find(const std::regex& expr, CPPUNIT_NS::Test* test)
+{
+    std::vector<CPPUNIT_NS::Test*> retvect;
+
+    if (!test) {
+        return retvect;
+    }
+
+    if (std::regex_match(test->getName(), expr)) {
+        retvect.push_back(test);
+        return retvect; // since we have added parent, all children are included
+    }
+
+    for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
+        std::vector<CPPUNIT_NS::Test*> subvect = internal_find(expr, test->getChildTestAt(i));
+
+        if (!subvect.empty()) {
+            retvect.insert(retvect.end(), subvect.begin(), subvect.end());
+        }
+    }
+
+    return retvect;
+}
+
+}

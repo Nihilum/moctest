@@ -22,7 +22,7 @@
  */
 
 /**
- * @file moctest/FindTest.hpp
+ * @file src/FindTest.cpp
  *
  * @desc FindTest functor.
  */
@@ -35,10 +35,6 @@
 
 namespace moctest
 {
-
-FindTest::FindTest()
-{
-}
 
 CPPUNIT_NS::Test* FindTest::operator()(const std::string& test_name, CPPUNIT_NS::Test* test)
 {

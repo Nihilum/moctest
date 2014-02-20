@@ -22,7 +22,7 @@
  */
 
 /**
- * @file moctest/Framework/ProgramOptions.cpp
+ * @file src/Framework/ProgramOptions.cpp
  *
  * @desc ProgramOptions support for moctest::Framework.
  */
@@ -54,14 +54,15 @@ bool ProgramOptions::parse_options()
         ("help,h", "show help message")
         ("list,l", "show test list")
         ("test,t", po::value< std::vector<std::string> >(&m_tests)->multitoken(), "runs given tests only")
+        ("regtest,r", po::value<std::string>(&m_regtest), "runs only tests which names match given regexp")
         ;
 
     try {
-		store(po::command_line_parser(m_argc, m_argv).options(po_cmdline).run(), *m_vm);
-    	notify(*m_vm);
+        store(po::command_line_parser(m_argc, m_argv).options(po_cmdline).run(), *m_vm);
+        notify(*m_vm);
     } catch (const std::exception& e) {
-    	std::cerr << e.what() << std::endl;
-    	return false;
+        std::cerr << e.what() << std::endl;
+        return false;
     }
 
     return true;
@@ -70,5 +71,6 @@ bool ProgramOptions::parse_options()
 bool ProgramOptions::asked_for_help() const { return m_vm->count("help") >= 1; }
 bool ProgramOptions::asked_for_list() const { return m_vm->count("list") >= 1; }
 bool ProgramOptions::asked_to_run_only_some_tests() const { return m_vm->count("test") >= 1; }
+bool ProgramOptions::asked_for_regtest() const { return m_vm->count("regtest") >= 1; }
 
 }

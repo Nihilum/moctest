@@ -22,16 +22,16 @@
  */
 
 /**
- * @file moctest/ListTests.hpp
+ * @file moctest/FindRegTest.hpp
  *
- * @desc Tests listing functor.
+ * @desc FindRegTest functor.
  */
 
-#ifndef MOCTEST_LISTTESTS_HPP
-#define MOCTEST_LISTTESTS_HPP
+#ifndef MOCTEST_FINDREGTEST_HPP
+#define MOCTEST_FINDREGTEST_HPP
 
-#include <cstdint>
-#include <sstream>
+#include <regex>
+#include <vector>
 
 #include <moctest/Config.hpp>
 
@@ -43,17 +43,15 @@ namespace CPPUNIT_NS
 namespace moctest
 {
 
-class MOCTEST_DLL_PUBLIC ListTests
+class MOCTEST_DLL_PUBLIC FindRegTest
 {
 public:
-    ListTests();
-
-    void operator()(std::stringstream& sStr, CPPUNIT_NS::Test* test, uint16_t tabs = 0);
+    std::vector<CPPUNIT_NS::Test*> operator()(const std::string& reg_expr, CPPUNIT_NS::Test* test);
 
 protected:
-    bool m_top_level;
+    std::vector<CPPUNIT_NS::Test*> internal_find(const std::regex& expr, CPPUNIT_NS::Test* test);
 };
 
 }
 
-#endif // MOCTEST_LISTTESTS_HPP
+#endif // MOCTEST_FINDREGTEST_HPP

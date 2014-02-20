@@ -22,13 +22,13 @@
  */
 
 /**
- * @file moctest/Framework/Framework.hpp
+ * @file tests/FindRegTest/TestFindRegTest.hpp
  *
- * @desc Framework encapsulating CPPUNIT.
+ * @desc Tests used to check correctness of FindRegTest functor.
  */
 
-#ifndef MOCTEST_FRAMEWORK_FRAMEWORK_HPP
-#define MOCTEST_FRAMEWORK_FRAMEWORK_HPP
+#ifndef MOCTEST_TESTS_FINDREGTEST_TEST_FINDREGTEST_HPP
+#define MOCTEST_TESTS_FINDREGTEST_TEST_FINDREGTEST_HPP
 
 #include <cppunit/TestRunner.h>
 #include <cppunit/TestResult.h>
@@ -38,33 +38,54 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
-#include <moctest/Config.hpp>
-#include <moctest/Framework/ProgramOptions.hpp>
-
-namespace moctest
+class TestFindRegTest : public CPPUNIT_NS::TestCase
 {
+    CPPUNIT_TEST_SUITE(TestFindRegTest);
+    CPPUNIT_TEST(test_find_regtest);
+    CPPUNIT_TEST_SUITE_END();
 
-class MOCTEST_DLL_PUBLIC Framework
-{
 public:
-    Framework(int argc, char** argv);
-
-    template <typename T>
-    void register_suite()
-    {
-        static CPPUNIT_NS::TestSuiteFactory<T> factory;
-        get_registry()->registerFactory(&factory);
-    }
-
-    int run();
+    void setUp();
+    void tearDown();
 
 protected:
-    CPPUNIT_NS::TestFactoryRegistry* get_registry();
-
-protected:
-    ProgramOptions m_po;
+    void test_find_regtest();
 };
 
-}
+class TestOne : public CPPUNIT_NS::TestCase
+{
+    CPPUNIT_TEST_SUITE(TestOne);
+    CPPUNIT_TEST(underlying_test_one);
+    CPPUNIT_TEST(underlying_test_two);
+    CPPUNIT_TEST(underlying_test_three);
+    CPPUNIT_TEST_SUITE_END();
 
-#endif // MOCTEST_FRAMEWORK_FRAMEWORK_HPP
+public:
+    void setUp() {}
+    void tearDown() {}
+
+protected:
+    void underlying_test_one() {}
+    void underlying_test_two() {}
+    void underlying_test_three() {}
+};
+
+class TestTwo : public CPPUNIT_NS::TestCase
+{
+    CPPUNIT_TEST_SUITE(TestTwo);
+    CPPUNIT_TEST(underlying_test_one);
+    CPPUNIT_TEST(underlying_test_two);
+    CPPUNIT_TEST(underlying_test_three);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void setUp() {}
+    void tearDown() {}
+
+protected:
+    void underlying_test_one() {}
+    void underlying_test_two() {}
+    void underlying_test_three() {}
+};
+
+#endif // MOCTEST_TESTS_FINDREGTEST_TEST_FINDREGTEST_HPP
