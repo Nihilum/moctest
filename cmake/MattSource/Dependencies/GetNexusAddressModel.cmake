@@ -19,25 +19,17 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.2.2)
-project(moctest CXX)
+include(MattSource/Environment/DetermineAddressModel)
 
-set(MOCTEST_VERSION 0.3.0)
-set(MOCTEST_TAG dev)
-set(MOCTEST_EMAIL matt@mattsource.com)
-set(LIBRARY_NAME moctest)
+function(MSource_GetNexusAddressModel MSOURCE_NEXUS_ADDRESS_MODEL)
+  MSource_DetermineAddressModel(TMP_ADDRESS_MODEL)
+  if(${TMP_ADDRESS_MODEL} STREQUAL "32")
+    set(${MSOURCE_NEXUS_ADDRESS_MODEL} "i686" PARENT_SCOPE)
+  elseif(${TMP_ADDRESS_MODEL} STREQUAL "64")
+    set(${MSOURCE_NEXUS_ADDRESS_MODEL} "x86_64" PARENT_SCOPE)
+  else()
+    set(${MSOURCE_NEXUS_ADDRESS_MODEL} "unknown" PARENT_SCOPE)
+  endif()
 
-# Make sure that we can find all CMake includes
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-
-include(MattSource/MattSource)
-
-MSource_ForceOutOfSourceBuild()
-MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
-message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
-
-set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
-
-if (USE_DEPS)
-  MSource_GetDependencies()
-endif()
+  unset(TMP_ADDRESS_MODEL)
+endfunction()

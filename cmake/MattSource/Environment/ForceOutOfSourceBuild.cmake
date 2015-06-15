@@ -19,25 +19,22 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.2.2)
-project(moctest CXX)
+function(MSource_ForceOutOfSourceBuild)
+  string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" BUILDING_IN_SOURCE)
 
-set(MOCTEST_VERSION 0.3.0)
-set(MOCTEST_TAG dev)
-set(MOCTEST_EMAIL matt@mattsource.com)
-set(LIBRARY_NAME moctest)
+  if (EXISTS ${CMAKE_SOURCE_DIR}/CMakeCache.txt)
+    set (BUILDING_IN_SOURCE 1)
+  endif()
 
-# Make sure that we can find all CMake includes
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+  if (EXISTS ${CMAKE_SOURCE_DIR}/CMakeFiles)
+    set (BUILDING_IN_SOURCE 1)
+  endif()
 
-include(MattSource/MattSource)
-
-MSource_ForceOutOfSourceBuild()
-MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
-message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
-
-set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
-
-if (USE_DEPS)
-  MSource_GetDependencies()
-endif()
+  if (BUILDING_IN_SOURCE)
+    message(FATAL_ERROR
+      "\nThis project requires an out of source build. Remove the file 'CMakeCache.txt' and the folder 'CMakeFiles' "
+      "found in this directory before continuing, create a separate build directory and "
+      "run 'cmake <srcs> [options]' from there (e.g. 'cmake ..').\n"
+    )
+  endif()
+endfunction()

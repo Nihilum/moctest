@@ -19,25 +19,17 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.2.2)
-project(moctest CXX)
+function(MSource_GetNexusFile MSOURCE_NEXUS_URL MSOURCE_NEXUS_USERNAME MSOURCE_NEXUS_PASSWORD)
+  file(STRINGS nexus.txt NEXUS_FILE)
+  list(GET NEXUS_FILE 0 TMP_NEXUS_URL)
+  list(GET NEXUS_FILE 1 TMP_NEXUS_USERNAME)
+  list(GET NEXUS_FILE 2 TMP_NEXUS_PASSWORD)
 
-set(MOCTEST_VERSION 0.3.0)
-set(MOCTEST_TAG dev)
-set(MOCTEST_EMAIL matt@mattsource.com)
-set(LIBRARY_NAME moctest)
+  set(${MSOURCE_NEXUS_URL} ${TMP_NEXUS_URL} PARENT_SCOPE)
+  set(${MSOURCE_NEXUS_USERNAME} ${TMP_NEXUS_USERNAME} PARENT_SCOPE)
+  set(${MSOURCE_NEXUS_PASSWORD} ${TMP_NEXUS_PASSWORD} PARENT_SCOPE)
 
-# Make sure that we can find all CMake includes
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-
-include(MattSource/MattSource)
-
-MSource_ForceOutOfSourceBuild()
-MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
-message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
-
-set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
-
-if (USE_DEPS)
-  MSource_GetDependencies()
-endif()
+  unset(TMP_NEXUS_URL)
+  unset(TMP_NEXUS_USERNAME)
+  unset(TMP_NEXUS_PASSWORD)
+endfunction()

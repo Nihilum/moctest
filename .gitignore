@@ -1,3 +1,9 @@
+# IDE
+.idea/
+
+# Nexus
+nexus.txt
+
 # Compiled Object files
 *.slo
 *.lo

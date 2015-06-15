@@ -19,25 +19,13 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 3.2.2)
-project(moctest CXX)
+function(MSource_GetDepsFile MSOURCE_DEPS_FILE MSOURCE_NUM_OF_DEPS)
+  file(STRINGS deps.txt TMP_DEPS_FILE)
+  list(LENGTH TMP_DEPS_FILE TMP_NUM_OF_DEPS)
 
-set(MOCTEST_VERSION 0.3.0)
-set(MOCTEST_TAG dev)
-set(MOCTEST_EMAIL matt@mattsource.com)
-set(LIBRARY_NAME moctest)
+  set(${MSOURCE_DEPS_FILE} ${TMP_DEPS_FILE} PARENT_SCOPE)
+  set(${MSOURCE_NUM_OF_DEPS} ${TMP_NUM_OF_DEPS} PARENT_SCOPE)
 
-# Make sure that we can find all CMake includes
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-
-include(MattSource/MattSource)
-
-MSource_ForceOutOfSourceBuild()
-MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
-message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
-
-set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
-
-if (USE_DEPS)
-  MSource_GetDependencies()
-endif()
+  unset(TMP_DEPS_FILE)
+  unset(TMP_NUM_OF_DEPS)
+endfunction()
