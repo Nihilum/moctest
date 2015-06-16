@@ -20,10 +20,35 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 function(MSource_GetDependency MSOURCE_GROUP MSOURCE_DEP MSOURCE_VER NEXUS_URL NEXUS_USERNAME NEXUS_PASSWORD NEXUS_OS NEXUS_ADDRESS_MODEL NEXUS_PLATFORM_COMPILER)
-  set(TMP_PATH_GENERIC "${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}")
+  set(TMP_PATH_GENERIC "${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}-${MSOURCE_VER}")
+  set(TMP_FILE_RELEASE "${TMP_PATH_GENERIC}-release")
+  set(TMP_FILE_DEBUG "${TMP_PATH_GENERIC}-debug")
 
-  if(NOT EXISTS deps)
+  if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps)
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/deps)
+  endif()
+
+  if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE})
+    message(STATUS "Downloading ${TMP_FILE_RELEASE}.zip from nexus...")
+    execute_process(COMMAND curl -L -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} "${NEXUS_URL}/nexus/service/local/artifact/maven/redirect?r=public&g=${MSOURCE_GROUP}&a=${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}&v=${MSOURCE_VER}&p=zip&c=release" -o ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip)
+    message(STATUS "Unpacking ${TMP_FILE_RELEASE}.zip...")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/deps)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip)
+  else()
+    message(STATUS "${TMP_FILE_RELEASE} is in cache.")
+  endif()
+
+  if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG})
+    message(STATUS "Downloading ${TMP_FILE_DEBUG}.zip from nexus...")
+    execute_process(COMMAND curl -L -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} "${NEXUS_URL}/nexus/service/local/artifact/maven/redirect?r=public&g=${MSOURCE_GROUP}&a=${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}&v=${MSOURCE_VER}&p=zip&c=debug" -o ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip)
+    message(STATUS "Unpacking ${TMP_FILE_DEBUG}.zip...")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/deps)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip)
+  else()
+    message(STATUS "${TMP_FILE_DEBUG} is in cache.")
   endif()
 
   unset(TMP_FILENAME_GENERIC)
+  unset(TMP_FILE_RELEASE)
+  unset(TMP_FILE_DEBUG)
 endfunction()
