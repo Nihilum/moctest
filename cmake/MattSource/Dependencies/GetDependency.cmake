@@ -31,8 +31,18 @@ function(MSource_GetDependency MSOURCE_GROUP MSOURCE_DEP MSOURCE_VER NEXUS_URL N
   if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE})
     message(STATUS "Downloading ${TMP_FILE_RELEASE}.zip from nexus...")
     execute_process(COMMAND curl -L -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} "${NEXUS_URL}/nexus/service/local/artifact/maven/redirect?r=public&g=${MSOURCE_GROUP}&a=${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}&v=${MSOURCE_VER}&p=zip&c=release" -o ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip)
+
+    if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip)
+      message(FATAL_ERROR "Could not download ${TMP_FILE_RELEASE}.zip...")
+    endif()
+
     message(STATUS "Unpacking ${TMP_FILE_RELEASE}.zip...")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/deps)
+
+    if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE})
+      message(FATAL_ERROR "Could not unpack ${TMP_FILE_RELEASE}.zip... See if it exists in nexus.")
+    endif()
+
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_RELEASE}.zip)
   else()
     message(STATUS "${TMP_FILE_RELEASE} is in cache.")
@@ -41,8 +51,18 @@ function(MSource_GetDependency MSOURCE_GROUP MSOURCE_DEP MSOURCE_VER NEXUS_URL N
   if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG})
     message(STATUS "Downloading ${TMP_FILE_DEBUG}.zip from nexus...")
     execute_process(COMMAND curl -L -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} "${NEXUS_URL}/nexus/service/local/artifact/maven/redirect?r=public&g=${MSOURCE_GROUP}&a=${MSOURCE_DEP}-${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}&v=${MSOURCE_VER}&p=zip&c=debug" -o ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip)
+
+    if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip)
+      message(FATAL_ERROR "Could not download ${TMP_FILE_DEBUG}.zip...")
+    endif()
+
     message(STATUS "Unpacking ${TMP_FILE_DEBUG}.zip...")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xf ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/deps)
+
+    if(NOT EXISTS ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG})
+      message(FATAL_ERROR "Could not unpack ${TMP_FILE_DEBUG}.zip... See if it exists in nexus.")
+    endif()
+
     execute_process(COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/deps/${TMP_FILE_DEBUG}.zip)
   else()
     message(STATUS "${TMP_FILE_DEBUG} is in cache.")
