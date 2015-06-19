@@ -4,6 +4,9 @@
 # Nexus
 nexus.txt
 
+# Build
+deps/
+
 # Compiled Object files
 *.slo
 *.lo

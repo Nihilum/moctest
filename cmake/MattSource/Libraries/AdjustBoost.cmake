@@ -20,7 +20,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 function(MSource_AdjustBoost)
-  file(GLOB DEPS_DIR ${CMAKE_BINARY_DIR}/deps/*)
+  file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
 
   foreach(DEP ${DEPS_DIR})
     if(DEP MATCHES "boost.*debug")

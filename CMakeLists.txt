@@ -42,7 +42,7 @@ if (USE_DEPS)
   MSource_GetDependencies()
   MSource_AdjustBoost()
 
-  file(GLOB deps_dir ${CMAKE_BINARY_DIR}/deps/*)
+  file(GLOB deps_dir ${CMAKE_SOURCE_DIR}/deps/*)
   set(BOOST_ROOT ${deps_dir})
 endif()
 
