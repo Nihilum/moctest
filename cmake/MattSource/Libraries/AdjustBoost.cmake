@@ -19,8 +19,18 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-include(MattSource/Environment/Environment)
-include(MattSource/Dependencies/Dependencies)
-include(MattSource/Libraries/Libraries)
+function(MSource_AdjustBoost)
+  file(GLOB DEPS_DIR ${CMAKE_BINARY_DIR}/deps/*)
 
-message(STATUS "MattSource CMake Build Environment Initialised")
+  foreach(DEP ${DEPS_DIR})
+    if(DEP MATCHES "boost.*debug")
+      set(BOOST_PATH_DEBUG ${DEP})
+    endif()
+    if(DEP MATCHES "boost.*release")
+      set(BOOST_PATH_RELEASE ${DEP})
+    endif()
+  endforeach()
+
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_PATH_RELEASE}/lib ${BOOST_PATH_DEBUG}/lib)
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_PATH_DEBUG}/lib ${BOOST_PATH_RELEASE}/lib)
+endfunction()
