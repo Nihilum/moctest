@@ -83,7 +83,7 @@ link_directories(${Boost_LIBRARY_DIR})
 # Include dirs
 include_directories(
   ${CMAKE_SOURCE_DIR}/include/
-  ${CPPUNIT_INCLUDE_DIR}
+  ${CPPUNIT_INCLUDE_DIR}/
   ${Boost_INCLUDE_DIR}
 )
 
