@@ -43,6 +43,7 @@ MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
 message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
 
 set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/rtm" CACHE STRING "Place where rtm files will be saved.")
 
 # Prepare 3rd party libraries
 
@@ -117,4 +118,18 @@ target_link_libraries(${LIBRARY_NAME}
 # Use helper variable for linking in tests
 set(MOCTEST_LIB ${LIBRARY_NAME})
 
+# Build all tests
 add_subdirectory(tests)
+
+# Install RTM
+install(TARGETS ${LIBRARY_NAME}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+)
+
+install(TARGETS ${LIBRARY_NAME}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/tests
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
+)

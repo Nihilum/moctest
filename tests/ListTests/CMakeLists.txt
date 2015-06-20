@@ -26,7 +26,7 @@ set(TEST_SRCS
   TestListTests.cpp
 )
 
-if(WIN32)
+if(WIN32 AND NOT MINGW)
   # Disable dll-external warnings for Visual Studio; [/GS-] disable buffer overflow security checks (optimization)
   set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "/wd4251 /wd4275 /GS-")
 else()
@@ -39,15 +39,19 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH "\$ORIGIN")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-if(NOT DEFINED WIN32)
+if(NOT DEFINED WIN32 AND NOT DEFINED MINGW)
   SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-new-dtags")
 endif()
 
-link_directories(${BOOST_LIBS})
+link_directories(${Boost_LIBRARY_DIR})
 
 add_executable(${TEST_NAME} ${TEST_SRCS})
 
-target_link_libraries(${TEST_NAME} ${MOCTEST_LIB} ${CPPUNIT_LIB})
+target_link_libraries(${TEST_NAME}
+  ${MOCTEST_LIB}
+  debug ${CPPUNIT_DEBUG_LIBRARY}
+  optimized ${CPPUNIT_LIBRARY}
+)
 
 set_target_properties(${TEST_NAME} PROPERTIES COMPILE_FLAGS
   "${PROGRAM_COMPILE_FLAGS}"
