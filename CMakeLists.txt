@@ -49,7 +49,6 @@ set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
 if (USE_DEPS)
   MSource_GetDependencies()
   MSource_AdjustBoost()
-  MSource_Adjustcppunit()
 
   file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
   set(BOOST_ROOT ${DEPS_DIR})
@@ -115,7 +114,7 @@ target_link_libraries(${LIBRARY_NAME}
   optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}
 )
 
-# Use helper variable to link in tests
+# Use helper variable for linking in tests
 set(MOCTEST_LIB ${LIBRARY_NAME})
 
-
+add_subdirectory(tests)

@@ -70,7 +70,7 @@ ELSE(WIN32 AND NOT MINGW)
                ${CPPUNIT_INCLUDE_DIR}/../lib
                /usr/local/lib
                /usr/lib)
-  FIND_LIBRARY(CPPUNIT_LIBRARY_INSTALL cppunit
+  FIND_LIBRARY(CPPUNIT_LIBRARY_INSTALL cppunit-1-13-0
                ${CPPUNIT_PATH_RELEASE}/bin
                ${CPPUNIT_INCLUDE_DIR}/../bin
                /usr/local/lib
@@ -80,7 +80,7 @@ ELSE(WIN32 AND NOT MINGW)
                ${CPPUNIT_INCLUDE_DIR}/../lib
                /usr/local/lib
                /usr/lib)
-  FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY_INSTALL cppunit
+  FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY_INSTALL cppunit-1-13-0
                ${CPPUNIT_PATH_DEBUG}/bin
                ${CPPUNIT_INCLUDE_DIR}/../bin
                /usr/local/lib
