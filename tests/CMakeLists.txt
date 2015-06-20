@@ -20,7 +20,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 add_subdirectory(FindTest)
+add_subdirectory(FindRegTest)
 add_subdirectory(Framework)
 add_subdirectory(LibVersion)
-add_subdirectory(FindRegTest)
 add_subdirectory(ListTests)

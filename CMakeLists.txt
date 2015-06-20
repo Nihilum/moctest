@@ -43,13 +43,13 @@ MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
 message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
 
 set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/rtm" CACHE STRING "Place where rtm files will be saved.")
 
 # Prepare 3rd party libraries
 
 if (USE_DEPS)
   MSource_GetDependencies()
   MSource_AdjustBoost()
-  MSource_Adjustcppunit()
 
   file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
   set(BOOST_ROOT ${DEPS_DIR})
@@ -83,7 +83,7 @@ link_directories(${Boost_LIBRARY_DIR})
 # Include dirs
 include_directories(
   ${CMAKE_SOURCE_DIR}/include/
-  ${CPPUNIT_INCLUDE_DIR}
+  ${CPPUNIT_INCLUDE_DIR}/
   ${Boost_INCLUDE_DIR}
 )
 
@@ -92,7 +92,8 @@ add_definitions( ${Boost_LIB_DIAGNOSTIC_DEFINITIONS} ) # http://www.cmake.org/cm
 add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
 
 if (MINGW)
-  add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
+  #add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
+  add_definitions(-std=c++11)
 endif()
 
 # Properly setup RPATH (Linux)
@@ -107,19 +108,28 @@ add_library(${LIBRARY_NAME} SHARED
 )
 
 # Link libraries
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-  target_link_libraries(${LIBRARY_NAME}
-    ${CPPUNIT_DEBUG_LIBRARY}
-    ${Boost_LIBRARIES}
-  )
-else()
-  target_link_libraries(${LIBRARY_NAME}
-    ${CPPUNIT_LIBRARY}
-    ${Boost_LIBRARIES}
-  )
-endif()
+target_link_libraries(${LIBRARY_NAME}
+  debug ${CPPUNIT_DEBUG_LIBRARY}
+  optimized ${CPPUNIT_LIBRARY}
+  debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}
+  optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}
+)
 
-# Use helper variable to link in tests
+# Use helper variable for linking in tests
 set(MOCTEST_LIB ${LIBRARY_NAME})
 
+# Build all tests
+add_subdirectory(tests)
 
+# Install RTM
+install(TARGETS ${LIBRARY_NAME}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+)
+
+install(TARGETS ${LIBRARY_NAME}
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/tests
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
