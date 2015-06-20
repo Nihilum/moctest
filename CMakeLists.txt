@@ -43,7 +43,11 @@ MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
 message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
 
 set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/rtm" CACHE STRING "Place where rtm files will be saved.")
+set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT "TRUE" CACHE BOOL "Use default cmake install prefix.")
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/rtm" CACHE STRING "Place where rtm files will be saved." FORCE)
+endif()
 
 # Prepare 3rd party libraries
 
@@ -107,6 +111,10 @@ add_library(${LIBRARY_NAME} SHARED
   ${LIBRARY_SRCS}
 )
 
+set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS
+  "${LIBRARY_COMPILE_FLAGS}"
+)
+
 # Link libraries
 target_link_libraries(${LIBRARY_NAME}
   debug ${CPPUNIT_DEBUG_LIBRARY}
@@ -133,3 +141,13 @@ install(TARGETS ${LIBRARY_NAME}
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
+
+# Install Boost libraries and cppunit library.
+if (WIN32)
+  install(FILES "${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
+  install(FILES "${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
+  install(FILES "${CPPUNIT_LIBRARY_INSTALL}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
+  if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    install(FILES "${CPPUNIT_DEBUG_LIBRARY_INSTALL}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
+  endif()
+endif()
