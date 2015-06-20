@@ -60,7 +60,7 @@ void ListTests::operator()(std::stringstream& sStr, CPPUNIT_NS::Test* test, uint
     }
 
     for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-        operator()(sStr, test->getChildTestAt(i), tabs + 1);
+        operator()(sStr, test->getChildTestAt(i), tabs + (uint16_t)1);
     }
 
     m_top_level = local_level;
