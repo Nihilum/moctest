@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 Mateusz Kolodziejski
+# Copyright (c) 2014-2015 Mateusz Kolodziejski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -19,17 +19,54 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 2.8)
-project(moctest)
+cmake_minimum_required(VERSION 3.2.2)
+project(moctest CXX)
+
+set(MOCTEST_VERSION 0.3.0)
+set(MOCTEST_TAG dev)
+set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
 add_definitions(
   -DMOCTEST_LIBRARY_VERSION_MAJOR=0
-  -DMOCTEST_LIBRARY_VERSION_MINOR=2
+  -DMOCTEST_LIBRARY_VERSION_MINOR=3
   -DMOCTEST_LIBRARY_VERSION_PATCH=0
 )
 
-if(WIN32)
+# Make sure that we can find all CMake includes
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/MattSource/Libraries)
+
+include(MattSource/MattSource)
+
+MSource_ForceOutOfSourceBuild()
+MSource_DetermineAddressModel(MSOURCE_ADDRESS_MODEL)
+message(STATUS "Detected ${MSOURCE_ADDRESS_MODEL}-bit address model.")
+
+set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
+
+# Prepare 3rd party libraries
+
+if (USE_DEPS)
+  MSource_GetDependencies()
+  MSource_AdjustBoost()
+  MSource_Adjustcppunit()
+
+  file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
+  set(BOOST_ROOT ${DEPS_DIR})
+  set(CPPUNIT_ROOT ${DEPS_DIR})
+endif()
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(cppunit REQUIRED)
+
+# Prepare project
+
+# Compile flags
+if(WIN32 AND NOT MINGW)
   # Disable dll-external warnings for Visual Studio; [/GS-] disable buffer overflow security checks (optimization)
   set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-DMOCTEST_DLL=1 /wd4251 /wd4275 /wd4351 /GS-")
 else()
@@ -37,85 +74,52 @@ else()
   set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-std=c++11 -DMOCTEST_DLL=1")
 endif()
 
+# Source files and includes
 file(GLOB_RECURSE LIBRARY_SRCS ${CMAKE_SOURCE_DIR}/src/ ${CMAKE_SOURCE_DIR}/src/*.cpp ${CMAKE_SOURCE_DIR}/include/*.hpp)
 
-link_directories(${BOOST_LIBS})
+# Link directories
+link_directories(${Boost_LIBRARY_DIR})
 
+# Include dirs
 include_directories(
   ${CMAKE_SOURCE_DIR}/include/
-  ${CPPUNIT_INCLUDES}
-  ${BOOST_INCLUDES}
+  ${CPPUNIT_INCLUDE_DIR}
+  ${Boost_INCLUDE_DIR}
 )
 
-add_definitions( ${Boost_LIB_DIAGNOSTIC_DEFINITIONS} )
-add_definitions( -DBOOST_ALL_DYN_LINK )
-add_definitions( -DBOOST_FILESYSTEM_NO_DEPRECATED )
+# Compilation definitions
+add_definitions( ${Boost_LIB_DIAGNOSTIC_DEFINITIONS} ) # http://www.cmake.org/cmake/help/v3.2/module/FindBoost.html
+add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
 
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+if (MINGW)
+  add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
+endif()
+
+# Properly setup RPATH (Linux)
+SET(CMAKE_SKIP_BUILD_RPATH FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH "\$ORIGIN:\$ORIGIN/../lib")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+# Specify that this project will build a library
 add_library(${LIBRARY_NAME} SHARED
   ${LIBRARY_SRCS}
 )
 
-if(WIN32)
+# Link libraries
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
   target_link_libraries(${LIBRARY_NAME}
-    ${CPPUNIT_LIB}
+    ${CPPUNIT_DEBUG_LIBRARY}
+    ${Boost_LIBRARIES}
   )
 else()
   target_link_libraries(${LIBRARY_NAME}
-    ${CPPUNIT_LIB}
-    boost_program_options
+    ${CPPUNIT_LIBRARY}
+    ${Boost_LIBRARIES}
   )
 endif()
 
+# Use helper variable to link in tests
 set(MOCTEST_LIB ${LIBRARY_NAME})
 
-add_subdirectory(tests)
 
-install(TARGETS ${LIBRARY_NAME}
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-)
-
-install(TARGETS ${LIBRARY_NAME}
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/tests
-)
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-)
-
-# Install Boost libraries and moccpp library if on Windows
-if (DEFINED WIN32)
-  add_definitions( -D_WIN32_WINNT=0x0501 )
-
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_chrono-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_date_time-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_filesystem-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_log_setup-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_log-.*")
-  set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_program_options-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_regex-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_system-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_thread-.*")
-  #set(MOCTEST_BOOST_LIBS_INUSE ${MOCTEST_BOOST_LIBS_INUSE} "boost_timer-.*")
-
-
-  file(TO_CMAKE_PATH ${BOOST_LIBS} MOCTEST_BOOST_LIBS)
-  file(GLOB_RECURSE MOCTEST_BOOST_LIBS_INSTALL ${MOCTEST_BOOST_LIBS}/ ${MOCTEST_BOOST_LIBS}/*.dll)
-
-  foreach(fName ${MOCTEST_BOOST_LIBS_INSTALL})
-    foreach(libName ${MOCTEST_BOOST_LIBS_INUSE})
-      if(${fName} MATCHES ${libName})
-        install(FILES "${fName}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
-      endif()
-    endforeach()
-  endforeach()
-endif()
-
-
-set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS
-  "${LIBRARY_COMPILE_FLAGS}"
-)
