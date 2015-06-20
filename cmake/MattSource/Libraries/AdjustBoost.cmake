@@ -20,6 +20,10 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 function(MSource_AdjustBoost)
+  if(ADJUSTED_BOOST)
+    return()
+  endif()
+
   file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
 
   foreach(DEP ${DEPS_DIR})
@@ -33,4 +37,6 @@ function(MSource_AdjustBoost)
 
   execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_PATH_RELEASE}/lib ${BOOST_PATH_DEBUG}/lib)
   execute_process(COMMAND ${CMAKE_COMMAND} -E copy_directory ${BOOST_PATH_DEBUG}/lib ${BOOST_PATH_RELEASE}/lib)
+
+  set(ADJUSTED_BOOST "TRUE" CACHE BOOL "Boost has been adjusted.")
 endfunction()

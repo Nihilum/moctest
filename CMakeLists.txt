@@ -28,7 +28,7 @@ set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
 # Make sure that we can find all CMake includes
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/MattSource/Libraries)
 
 include(MattSource/MattSource)
 
@@ -41,9 +41,11 @@ set(USE_DEPS "TRUE" CACHE BOOL "Use deps.txt file and artifactory")
 if (USE_DEPS)
   MSource_GetDependencies()
   MSource_AdjustBoost()
+  MSource_Adjustcppunit()
 
-  file(GLOB deps_dir ${CMAKE_SOURCE_DIR}/deps/*)
-  set(BOOST_ROOT ${deps_dir})
+  file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
+  set(BOOST_ROOT ${DEPS_DIR})
+  set(CPPUNIT_ROOT ${DEPS_DIR})
 endif()
 
 set(Boost_USE_STATIC_LIBS OFF)
@@ -51,3 +53,4 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
 find_package(Boost REQUIRED COMPONENTS program_options)
+find_package(cppunit REQUIRED)
