@@ -44,7 +44,7 @@ constexpr uint16_t get_library_version_major()
 
 constexpr uint16_t get_library_version_minor()
 {
-    return 2;
+    return 3;
 }
 
 constexpr uint16_t get_library_version_patch()
@@ -56,7 +56,7 @@ constexpr const char* get_library_version_string()
 {
     return MOCTEST_MACRO_NUMBER_TO_STRING(0)
             "."
-            MOCTEST_MACRO_NUMBER_TO_STRING(2)
+            MOCTEST_MACRO_NUMBER_TO_STRING(3)
             "."
             MOCTEST_MACRO_NUMBER_TO_STRING(0);
 }
