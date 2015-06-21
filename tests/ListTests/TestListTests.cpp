@@ -37,44 +37,55 @@
 
 #include "TestListTests.hpp"
 
-void TestListTests::setUp()
-{
+void TestListTests::setUp() {
 }
 
-void TestListTests::tearDown()
-{
+void TestListTests::tearDown() {
 }
 
-void TestListTests::test_list_tests()
-{
-    std::stringstream sExpected;
-    sExpected 
-    << "Available tests:\n"
-    << "- All Tests\n"
-    << "\t- TestListTests\n"
-    << "\t\t- TestListTests::test_list_tests\n"
-    << "\t- TestOne\n"
-    << "\t\t- TestOne::underlying_test_one\n"
-    << "\t\t- TestOne::underlying_test_two\n"
-    << "\t\t- TestOne::underlying_test_three\n"
-    << "\t- TestTwo\n"
-    << "\t\t- TestTwo::underlying_test_one\n"
-    << "\t\t- TestTwo::underlying_test_two\n"
-    << "\t\t- TestTwo::underlying_test_three\n";
+void TestListTests::test_list_tests() {
+    std::map<std::string, bool> expected_lines = {
+            {"Available tests:",                     false},
+            {"- All Tests",                          false},
+            {"\t- TestListTests",                    false},
+            {"\t\t- TestListTests::test_list_tests", false},
+            {"\t- TestOne",                          false},
+            {"\t\t- TestOne::underlying_test_one",   false},
+            {"\t\t- TestOne::underlying_test_two",   false},
+            {"\t\t- TestOne::underlying_test_three", false},
+            {"\t- TestTwo",                          false},
+            {"\t\t- TestTwo::underlying_test_one",   false},
+            {"\t\t- TestTwo::underlying_test_two",   false},
+            {"\t\t- TestTwo::underlying_test_three", false}
+    };
 
     std::stringstream sStr;
     moctest::ListTests tests_lister;
     tests_lister(sStr, CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
 
-    CPPUNIT_ASSERT_EQUAL(sExpected.str(), sStr.str());
+    std::string line;
+    while (std::getline(sStr, line)) {
+        auto expected_line = expected_lines.find(line);
+
+        if (expected_line == expected_lines.end()) {
+            continue;
+        }
+
+        expected_line->second = true;
+    }
+
+    for (auto expected_line_found : expected_lines) {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                std::string("Line '") + std::string(expected_line_found.first) + std::string("' not found."), true,
+                expected_line_found.second);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestListTests);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestOne);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTwo);
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     CPPUNIT_NS::TestResult controller;
 
     CPPUNIT_NS::TestResultCollector result;
@@ -84,7 +95,8 @@ int main(int argc, char* argv[])
     controller.addListener(&progress);
 
     moctest::FindTest test_finder;
-    CPPUNIT_NS::Test* list_tests = test_finder("TestListTests::test_list_tests", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    CPPUNIT_NS::Test *list_tests = test_finder("TestListTests::test_list_tests",
+                                               CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(list_tests);
     runner.run(controller);
