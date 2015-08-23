@@ -22,7 +22,7 @@
 cmake_minimum_required(VERSION 3.2.2)
 project(moctest CXX)
 
-set(MOCTEST_VERSION 0.3.0)
+set(MOCTEST_VERSION 0.3.1)
 set(MOCTEST_TAG dev)
 set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
@@ -30,7 +30,7 @@ set(LIBRARY_NAME moctest)
 add_definitions(
   -DMOCTEST_LIBRARY_VERSION_MAJOR=0
   -DMOCTEST_LIBRARY_VERSION_MINOR=3
-  -DMOCTEST_LIBRARY_VERSION_PATCH=0
+  -DMOCTEST_LIBRARY_VERSION_PATCH=1
 )
 
 # Make sure that we can find all CMake includes
