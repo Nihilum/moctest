@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -38,23 +38,26 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
-class TestLibVersion : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestLibVersion);
-    CPPUNIT_TEST(test_get_library_version_major);
-    CPPUNIT_TEST(test_get_library_version_minor);
-    CPPUNIT_TEST(test_get_library_version_patch);
-    CPPUNIT_TEST(test_get_library_version_string);
+class TestLibVersion final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestLibVersion);
+        CPPUNIT_TEST(test_get_library_version_major);
+        CPPUNIT_TEST(test_get_library_version_minor);
+        CPPUNIT_TEST(test_get_library_version_patch);
+        CPPUNIT_TEST(test_get_library_version_string);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp();
-    void tearDown();
+    void setUp() override;
+
+    void tearDown() override;
 
 protected:
     void test_get_library_version_major();
+
     void test_get_library_version_minor();
+
     void test_get_library_version_patch();
+
     void test_get_library_version_string();
 };
 

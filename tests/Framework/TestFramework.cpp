@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,43 +32,41 @@
 
 #include "TestFramework.hpp"
 
-void TestFramework::setUp()
-{
+void TestFramework::setUp() {
 }
 
-void TestFramework::tearDown()
-{
+void TestFramework::tearDown() {
 }
 
-class TestString : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestString);
-    CPPUNIT_TEST(test_string);
+class TestString final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestString);
+        CPPUNIT_TEST(test_string);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() {}
-    void tearDown() {}
+    void setUp() override { }
+
+    void tearDown() override { }
 
 protected:
     void test_string() { std::cout << "Displaying something."; }
 };
 
-void TestFramework::test_framework()
-{
+void TestFramework::test_framework() {
     const int argc = 2;
     std::stringstream sCatch;
     std::stringstream sCerr;
 
     {
-        const char* h_argv[argc] = { "./framework", "-h" };
-        std::string expected_h("Possible options:\n--help (-h)\tshows this help message\n--list (-l)\tshows the list of all possible tests\n"
-                               "--test (-t) <test_name1> [<test_name2>...]\truns given tests only\n--regtest (-r) <name_regex> runs only tests which names match given regexp\n");
+        const char *h_argv[argc] = {"./framework", "-h"};
+        std::string expected_h(
+                "Possible options:\n--help (-h)\tshows this help message\n--list (-l)\tshows the list of all possible tests\n"
+                        "--test (-t) <test_name1> [<test_name2>...]\truns given tests only\n--regtest (-r) <name_regex> runs only tests which names match given regexp\n");
 
-        moctest::Framework h_tests(argc, (char**)h_argv);
+        moctest::Framework h_tests(argc, (char **) h_argv);
 
-        std::streambuf* prevstr = std::cout.rdbuf();
-        std::streambuf* prevcerr = std::cerr.rdbuf();
+        std::streambuf *prev_str = std::cout.rdbuf();
+        std::streambuf *prev_cerr = std::cerr.rdbuf();
         std::cout.rdbuf(sCatch.rdbuf());
         std::cerr.rdbuf(sCerr.rdbuf());
 
@@ -76,13 +74,13 @@ void TestFramework::test_framework()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), 0, h_tests.run());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), expected_h, sCatch.str());
         } catch (...) {
-            std::cout.rdbuf(prevstr);
-            std::cerr.rdbuf(prevcerr);
+            std::cout.rdbuf(prev_str);
+            std::cerr.rdbuf(prev_cerr);
             throw;
         }
 
-        std::cout.rdbuf(prevstr);
-        std::cerr.rdbuf(prevcerr);
+        std::cout.rdbuf(prev_str);
+        std::cerr.rdbuf(prev_cerr);
     }
 
     sCatch.str("");
@@ -91,12 +89,13 @@ void TestFramework::test_framework()
     sCerr.clear();
 
     {
-        const char* l_argv[argc] = { "./framework", "-l" };
-        std::string expected_l("Available tests:\n- All Tests\n\t- TestFramework\n\t\t- TestFramework::test_framework\n\n");
-        moctest::Framework l_tests(argc, (char**)l_argv);
+        const char *l_argv[argc] = {"./framework", "-l"};
+        std::string expected_l(
+                "Available tests:\n- All Tests\n\t- TestFramework\n\t\t- TestFramework::test_framework\n\n");
+        moctest::Framework l_tests(argc, (char **) l_argv);
 
-        std::streambuf* prevstr = std::cout.rdbuf();
-        std::streambuf* prevcerr = std::cerr.rdbuf();
+        std::streambuf *prev_str = std::cout.rdbuf();
+        std::streambuf *prev_cerr = std::cerr.rdbuf();
         std::cout.rdbuf(sCatch.rdbuf());
         std::cerr.rdbuf(sCerr.rdbuf());
 
@@ -104,13 +103,13 @@ void TestFramework::test_framework()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), 0, l_tests.run());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), expected_l, sCatch.str());
         } catch (...) {
-            std::cout.rdbuf(prevstr);
-            std::cerr.rdbuf(prevcerr);
+            std::cout.rdbuf(prev_str);
+            std::cerr.rdbuf(prev_cerr);
             throw;
         }
 
-        std::cout.rdbuf(prevstr);
-        std::cerr.rdbuf(prevcerr);
+        std::cout.rdbuf(prev_str);
+        std::cerr.rdbuf(prev_cerr);
     }
 
     sCatch.str("");
@@ -119,13 +118,13 @@ void TestFramework::test_framework()
     sCerr.clear();
 
     {
-        const char* t_argv[argc] = { "./framework", "-tTestString" };
+        const char *t_argv[argc] = {"./framework", "-tTestString"};
         std::string expected_t("TestString::test_stringDisplaying something. : OK\n");
-        moctest::Framework t_tests(argc, (char**)t_argv);
+        moctest::Framework t_tests(argc, (char **) t_argv);
         t_tests.register_suite<TestString>();
 
-        std::streambuf* prevstr = std::cout.rdbuf();
-        std::streambuf* prevcerr = std::cerr.rdbuf();
+        std::streambuf *prev_str = std::cout.rdbuf();
+        std::streambuf *prev_cerr = std::cerr.rdbuf();
         std::cout.rdbuf(sCatch.rdbuf());
         std::cerr.rdbuf(sCerr.rdbuf());
 
@@ -133,13 +132,13 @@ void TestFramework::test_framework()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), 0, t_tests.run());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), expected_t, sCatch.str());
         } catch (...) {
-            std::cout.rdbuf(prevstr);
-            std::cerr.rdbuf(prevcerr);
+            std::cout.rdbuf(prev_str);
+            std::cerr.rdbuf(prev_cerr);
             throw;
         }
 
-        std::cout.rdbuf(prevstr);
-        std::cerr.rdbuf(prevcerr);
+        std::cout.rdbuf(prev_str);
+        std::cerr.rdbuf(prev_cerr);
     }
 
     sCatch.str("");
@@ -148,13 +147,13 @@ void TestFramework::test_framework()
     sCerr.clear();
 
     {
-        const char* t_argv[argc] = { "./framework", "-r.*String.*" };
+        const char *t_argv[argc] = {"./framework", "-r.*String.*"};
         std::string expected_t("TestString::test_stringDisplaying something. : OK\n");
-        moctest::Framework t_tests(argc, (char**)t_argv);
+        moctest::Framework t_tests(argc, (char **) t_argv);
         t_tests.register_suite<TestString>();
 
-        std::streambuf* prevstr = std::cout.rdbuf();
-        std::streambuf* prevcerr = std::cerr.rdbuf();
+        std::streambuf *prev_str = std::cout.rdbuf();
+        std::streambuf *prev_cerr = std::cerr.rdbuf();
         std::cout.rdbuf(sCatch.rdbuf());
         std::cerr.rdbuf(sCerr.rdbuf());
 
@@ -162,18 +161,17 @@ void TestFramework::test_framework()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), 0, t_tests.run());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sCatch.str(), expected_t, sCatch.str());
         } catch (...) {
-            std::cout.rdbuf(prevstr);
-            std::cerr.rdbuf(prevcerr);
+            std::cout.rdbuf(prev_str);
+            std::cerr.rdbuf(prev_cerr);
             throw;
         }
 
-        std::cout.rdbuf(prevstr);
-        std::cerr.rdbuf(prevcerr);
+        std::cout.rdbuf(prev_str);
+        std::cerr.rdbuf(prev_cerr);
     }
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     moctest::Framework tests(argc, argv);
     tests.register_suite<TestFramework>();
     return tests.run();

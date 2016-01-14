@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -38,28 +38,25 @@
 
 #include "TestFindRegTest.hpp"
 
-void TestFindRegTest::setUp()
-{
+void TestFindRegTest::setUp() {
 }
 
-void TestFindRegTest::tearDown()
-{
+void TestFindRegTest::tearDown() {
 }
 
-void TestFindRegTest::test_find_regtest()
-{
+void TestFindRegTest::test_find_regtest() {
     moctest::FindRegTest regtest_finder;
-    std::vector<std::string> vec_tests {
-                                         "TestOne::underlying_test_one", "TestOne::underlying_test_two", "TestOne::underlying_test_three",
-                                         "TestTwo::underlying_test_one", "TestTwo::underlying_test_two", "TestTwo::underlying_test_three"
-                                       };
+    std::vector<std::string> vec_tests{
+            "TestOne::underlying_test_one", "TestOne::underlying_test_two", "TestOne::underlying_test_three",
+            "TestTwo::underlying_test_one", "TestTwo::underlying_test_two", "TestTwo::underlying_test_three"
+    };
     auto found_tests = regtest_finder(".*underlying.*", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
 
-    std::for_each(found_tests.begin(), found_tests.end(), [&](CPPUNIT_NS::Test* test) {
+    std::for_each(found_tests.begin(), found_tests.end(), [&](CPPUNIT_NS::Test *test) {
         CPPUNIT_ASSERT_EQUAL(false, test == nullptr);
 
         bool found = false;
-        for (auto& test_name : vec_tests) {
+        for (auto &test_name : vec_tests) {
             if (test_name == test->getName()) {
                 found = true;
             }
@@ -73,8 +70,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TestFindRegTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestOne);
 CPPUNIT_TEST_SUITE_REGISTRATION(TestTwo);
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     CPPUNIT_NS::TestResult controller;
 
     CPPUNIT_NS::TestResultCollector result;
@@ -84,7 +80,8 @@ int main(int argc, char* argv[])
     controller.addListener(&progress);
 
     moctest::FindTest test_finder;
-    CPPUNIT_NS::Test* find_test = test_finder("TestFindRegTest::test_find_regtest", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    CPPUNIT_NS::Test *find_test = test_finder("TestFindRegTest::test_find_regtest",
+                                              CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(find_test);
     runner.run(controller);

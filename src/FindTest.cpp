@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -33,28 +33,26 @@
 
 #include <moctest/FindTest.hpp>
 
-namespace moctest
-{
+namespace moctest {
 
-CPPUNIT_NS::Test* FindTest::operator()(const std::string& test_name, CPPUNIT_NS::Test* test)
-{
-    if (test_name.empty() || !test) {
+    CPPUNIT_NS::Test *FindTest::operator()(const std::string &test_name, CPPUNIT_NS::Test *test) {
+        if (test_name.empty() || !test) {
+            return nullptr;
+        }
+
+        if (test->getName() == test_name) {
+            return test;
+        }
+
+        for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
+            CPPUNIT_NS::Test *exists = operator()(test_name, test->getChildTestAt(i));
+
+            if (exists) {
+                return exists;
+            }
+        }
+
         return nullptr;
     }
-
-    if (test->getName() == test_name) {
-        return test;
-    }
-
-    for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-        CPPUNIT_NS::Test* exists = operator()(test_name, test->getChildTestAt(i));
-
-        if (exists) {
-            return exists;
-        }
-    }
-
-    return nullptr;
-}
 
 }

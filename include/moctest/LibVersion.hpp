@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -34,32 +34,27 @@
 
 #include <moctest/Config.hpp>
 
-namespace moctest
-{
+namespace moctest {
 
-constexpr uint16_t get_library_version_major()
-{
-    return 0;
-}
+    constexpr uint16_t get_library_version_major() {
+        return 0;
+    }
 
-constexpr uint16_t get_library_version_minor()
-{
-    return 3;
-}
+    constexpr uint16_t get_library_version_minor() {
+        return 3;
+    }
 
-constexpr uint16_t get_library_version_patch()
-{
-    return 1;
-}
+    constexpr uint16_t get_library_version_patch() {
+        return 2;
+    }
 
-constexpr const char* get_library_version_string()
-{
-    return MOCTEST_MACRO_NUMBER_TO_STRING(0)
-            "."
-            MOCTEST_MACRO_NUMBER_TO_STRING(3)
-            "."
-            MOCTEST_MACRO_NUMBER_TO_STRING(1);
-}
+    constexpr const char *get_library_version_string() {
+        return MOCTEST_MACRO_NUMBER_TO_STRING(0)
+                "."
+                MOCTEST_MACRO_NUMBER_TO_STRING(3)
+                "."
+                MOCTEST_MACRO_NUMBER_TO_STRING(2);
+    }
 
 }
 

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -41,29 +41,26 @@
 #include <moctest/Config.hpp>
 #include <moctest/Framework/ProgramOptions.hpp>
 
-namespace moctest
-{
+namespace moctest {
 
-class MOCTEST_DLL_PUBLIC Framework
-{
-public:
-    Framework(int argc, char** argv);
+    class MOCTEST_DLL_PUBLIC Framework final {
+    public:
+        Framework(int argc, char **argv);
 
-    template <typename T>
-    void register_suite()
-    {
-        static CPPUNIT_NS::TestSuiteFactory<T> factory;
-        get_registry()->registerFactory(&factory);
-    }
+        template<typename T>
+        void register_suite() {
+            static CPPUNIT_NS::TestSuiteFactory<T> factory;
+            get_registry()->registerFactory(&factory);
+        }
 
-    int run();
+        int run();
 
-protected:
-    CPPUNIT_NS::TestFactoryRegistry* get_registry();
+    protected:
+        CPPUNIT_NS::TestFactoryRegistry *get_registry();
 
-protected:
-    ProgramOptions m_po;
-};
+    protected:
+        ProgramOptions m_po;
+    };
 
 }
 

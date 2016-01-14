@@ -1,2 +1,2 @@
-org.boost boost 1.59.0
+org.boost boost 1.60.0
 org.freedesktop cppunit 1.13.2

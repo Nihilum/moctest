@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2015 Mateusz Kolodziejski
+# Copyright (c) 2014-2016 Mateusz Kolodziejski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -22,7 +22,7 @@
 cmake_minimum_required(VERSION 3.2.2)
 project(moctest CXX)
 
-set(MOCTEST_VERSION 0.3.1)
+set(MOCTEST_VERSION 0.3.2)
 set(MOCTEST_TAG dev)
 set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
@@ -30,7 +30,7 @@ set(LIBRARY_NAME moctest)
 add_definitions(
   -DMOCTEST_LIBRARY_VERSION_MAJOR=0
   -DMOCTEST_LIBRARY_VERSION_MINOR=3
-  -DMOCTEST_LIBRARY_VERSION_PATCH=1
+  -DMOCTEST_LIBRARY_VERSION_PATCH=2
 )
 
 # Make sure that we can find all CMake includes
