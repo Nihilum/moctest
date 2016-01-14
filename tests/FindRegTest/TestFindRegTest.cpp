@@ -38,10 +38,10 @@
 
 #include "TestFindRegTest.hpp"
 
-void TestFindRegTest::setUp() override {
+void TestFindRegTest::setUp() {
 }
 
-void TestFindRegTest::tearDown() override {
+void TestFindRegTest::tearDown() {
 }
 
 void TestFindRegTest::test_find_regtest() {

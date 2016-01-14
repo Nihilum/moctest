@@ -37,10 +37,10 @@
 
 #include "TestListTests.hpp"
 
-void TestListTests::setUp() override {
+void TestListTests::setUp() {
 }
 
-void TestListTests::tearDown() override {
+void TestListTests::tearDown() {
 }
 
 void TestListTests::test_list_tests() {

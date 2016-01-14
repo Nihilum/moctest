@@ -37,10 +37,10 @@
 
 #include "TestFindTest.hpp"
 
-void TestFindTest::setUp() override {
+void TestFindTest::setUp() {
 }
 
-void TestFindTest::tearDown() override {
+void TestFindTest::tearDown() {
 }
 
 void TestFindTest::test_find_test() {

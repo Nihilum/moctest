@@ -34,10 +34,10 @@
 
 #include "TestLibVersion.hpp"
 
-void TestLibVersion::setUp() override {
+void TestLibVersion::setUp() {
 }
 
-void TestLibVersion::tearDown() override {
+void TestLibVersion::tearDown() {
 }
 
 void TestLibVersion::test_get_library_version_major() {

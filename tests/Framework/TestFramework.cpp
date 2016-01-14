@@ -32,10 +32,10 @@
 
 #include "TestFramework.hpp"
 
-void TestFramework::setUp() override {
+void TestFramework::setUp() {
 }
 
-void TestFramework::tearDown() override {
+void TestFramework::tearDown() {
 }
 
 class TestString final : public CPPUNIT_NS::TestCase {
