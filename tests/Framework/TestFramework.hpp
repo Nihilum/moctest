@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,15 +32,15 @@
 
 #include <moctest/moctest.hpp>
 
-class TestFramework : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestFramework);
-    CPPUNIT_TEST(test_framework);
+class TestFramework final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestFramework);
+        CPPUNIT_TEST(test_framework);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp();
-    void tearDown();
+    void setUp() override;
+
+    void tearDown() override;
 
 protected:
     void test_framework();

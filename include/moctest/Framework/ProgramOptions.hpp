@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -36,44 +36,45 @@
 
 #include <moctest/Config.hpp>
 
-namespace boost
-{
+namespace boost {
 
-namespace program_options
-{
-    class variables_map;
-}
+    namespace program_options {
+        class variables_map;
+    }
 
 }
 
 namespace po = boost::program_options;
 
-namespace moctest
-{
+namespace moctest {
 
-class MOCTEST_DLL_PUBLIC ProgramOptions
-{
-public:
-    ProgramOptions(int argc, char** argv);
-    ~ProgramOptions();
+    class MOCTEST_DLL_PUBLIC ProgramOptions final {
+    public:
+        ProgramOptions(int argc, char **argv);
 
-    bool parse_options();
+        ~ProgramOptions();
 
-    bool asked_for_help() const;
-    bool asked_for_list() const;
-    bool asked_to_run_only_some_tests() const;
-    bool asked_for_regtest() const;
+        bool parse_options();
 
-    const std::vector<std::string>& get_tests_to_run() const { return m_tests; }
-    const std::string& get_regtest() const { return m_regtest; }
+        bool asked_for_help() const;
 
-protected:
-    int m_argc;
-    char** m_argv;
-    std::unique_ptr<po::variables_map> m_vm;
-    std::vector<std::string> m_tests;
-    std::string m_regtest;
-};
+        bool asked_for_list() const;
+
+        bool asked_to_run_only_some_tests() const;
+
+        bool asked_for_regtest() const;
+
+        const std::vector<std::string> &get_tests_to_run() const { return m_tests; }
+
+        const std::string &get_regtest() const { return m_regtest; }
+
+    protected:
+        int m_argc;
+        char **m_argv;
+        std::unique_ptr<po::variables_map> m_vm;
+        std::vector<std::string> m_tests;
+        std::string m_regtest;
+    };
 
 }
 

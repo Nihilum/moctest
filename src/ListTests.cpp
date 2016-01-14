@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -31,39 +31,36 @@
 
 #include <moctest/ListTests.hpp>
 
-namespace moctest
-{
+namespace moctest {
 
-ListTests::ListTests()
- : m_top_level(true)
-{
-}
-
-void ListTests::operator()(std::stringstream& sStr, CPPUNIT_NS::Test* test, uint16_t tabs)
-{
-    if (test == nullptr) {
-        return;
+    ListTests::ListTests()
+            : m_top_level(true) {
     }
 
-    bool local_level = m_top_level;
-
-    if (m_top_level) {
-        sStr << "Available tests:\n";
-        sStr << "- " << test->getName() << "\n";
-        m_top_level = false;
-    } else {
-        for (uint16_t i = 0; i < tabs; ++i) {
-            sStr << "\t";
+    void ListTests::operator()(std::stringstream &sStr, CPPUNIT_NS::Test *test, uint16_t tabs) {
+        if (test == nullptr) {
+            return;
         }
 
-        sStr << "- " << test->getName() << "\n";
-    }
+        bool local_level = m_top_level;
 
-    for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-        operator()(sStr, test->getChildTestAt(i), tabs + (uint16_t)1);
-    }
+        if (m_top_level) {
+            sStr << "Available tests:\n";
+            sStr << "- " << test->getName() << "\n";
+            m_top_level = false;
+        } else {
+            for (uint16_t i = 0; i < tabs; ++i) {
+                sStr << "\t";
+            }
 
-    m_top_level = local_level;
-}
+            sStr << "- " << test->getName() << "\n";
+        }
+
+        for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
+            operator()(sStr, test->getChildTestAt(i), tabs + (uint16_t) 1);
+        }
+
+        m_top_level = local_level;
+    }
 
 }

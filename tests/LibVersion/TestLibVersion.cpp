@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -34,51 +34,44 @@
 
 #include "TestLibVersion.hpp"
 
-void TestLibVersion::setUp()
-{
+void TestLibVersion::setUp() override {
 }
 
-void TestLibVersion::tearDown()
-{
+void TestLibVersion::tearDown() override {
 }
 
-void TestLibVersion::test_get_library_version_major()
-{
+void TestLibVersion::test_get_library_version_major() {
     uint16_t expected_major_version = MOCTEST_LIBRARY_VERSION_MAJOR;
     CPPUNIT_ASSERT_EQUAL(expected_major_version, moctest::get_library_version_major());
 }
 
-void TestLibVersion::test_get_library_version_minor()
-{
+void TestLibVersion::test_get_library_version_minor() {
     uint16_t expected_minor_version = MOCTEST_LIBRARY_VERSION_MINOR;
     CPPUNIT_ASSERT_EQUAL(expected_minor_version, moctest::get_library_version_minor());
 }
 
-void TestLibVersion::test_get_library_version_patch()
-{
+void TestLibVersion::test_get_library_version_patch() {
     uint16_t expected_patch_version = MOCTEST_LIBRARY_VERSION_PATCH;
     CPPUNIT_ASSERT_EQUAL(expected_patch_version, moctest::get_library_version_patch());
 }
 
-void TestLibVersion::test_get_library_version_string()
-{
+void TestLibVersion::test_get_library_version_string() {
     char version[6] = {
-        static_cast<char>(MOCTEST_LIBRARY_VERSION_MAJOR + 48),
-        '.',
-        static_cast<char>(MOCTEST_LIBRARY_VERSION_MINOR + 48),
-        '.',
-        static_cast<char>(MOCTEST_LIBRARY_VERSION_PATCH + 48),
-        '\0'
+            static_cast<char>(MOCTEST_LIBRARY_VERSION_MAJOR + 48),
+            '.',
+            static_cast<char>(MOCTEST_LIBRARY_VERSION_MINOR + 48),
+            '.',
+            static_cast<char>(MOCTEST_LIBRARY_VERSION_PATCH + 48),
+            '\0'
     };
 
-    const char* expected_version = version;
+    const char *expected_version = version;
     CPPUNIT_ASSERT_EQUAL(std::string(expected_version), std::string(moctest::get_library_version_string()));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestLibVersion);
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     CPPUNIT_NS::TestResult controller;
 
     CPPUNIT_NS::TestResultCollector result;

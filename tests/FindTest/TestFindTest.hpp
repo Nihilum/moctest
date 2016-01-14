@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -38,54 +38,58 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
-class TestFindTest : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestFindTest);
-    CPPUNIT_TEST(test_find_test);
+class TestFindTest final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestFindTest);
+        CPPUNIT_TEST(test_find_test);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp();
-    void tearDown();
+    void setUp() override;
+
+    void tearDown() override;
 
 protected:
     void test_find_test();
 };
 
-class TestOne : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestOne);
-    CPPUNIT_TEST(underlying_test_one);
-    CPPUNIT_TEST(underlying_test_two);
-    CPPUNIT_TEST(underlying_test_three);
+class TestOne final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestOne);
+        CPPUNIT_TEST(underlying_test_one);
+        CPPUNIT_TEST(underlying_test_two);
+        CPPUNIT_TEST(underlying_test_three);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() {}
-    void tearDown() {}
+    void setUp() override { }
+
+    void tearDown() override { }
 
 protected:
-    void underlying_test_one() {}
-    void underlying_test_two() {}
-    void underlying_test_three() {}
+    void underlying_test_one() { }
+
+    void underlying_test_two() { }
+
+    void underlying_test_three() { }
 };
 
-class TestTwo : public CPPUNIT_NS::TestCase
-{
-    CPPUNIT_TEST_SUITE(TestTwo);
-    CPPUNIT_TEST(underlying_test_one);
-    CPPUNIT_TEST(underlying_test_two);
-    CPPUNIT_TEST(underlying_test_three);
+class TestTwo final : public CPPUNIT_NS::TestCase {
+CPPUNIT_TEST_SUITE(TestTwo);
+        CPPUNIT_TEST(underlying_test_one);
+        CPPUNIT_TEST(underlying_test_two);
+        CPPUNIT_TEST(underlying_test_three);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() {}
-    void tearDown() {}
+    void setUp() override { }
+
+    void tearDown() override { }
 
 protected:
-    void underlying_test_one() {}
-    void underlying_test_two() {}
-    void underlying_test_three() {}
+    void underlying_test_one() { }
+
+    void underlying_test_two() { }
+
+    void underlying_test_three() { }
 };
 
 #endif // MOCTEST_TESTS_FINDTEST_TEST_FINDTEST_HPP

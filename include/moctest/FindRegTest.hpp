@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2015 Mateusz Kolodziejski
+ * Copyright (c) 2014-2016 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -35,22 +35,19 @@
 
 #include <moctest/Config.hpp>
 
-namespace CPPUNIT_NS
-{
+namespace CPPUNIT_NS {
     class Test;
 }
 
-namespace moctest
-{
+namespace moctest {
 
-class MOCTEST_DLL_PUBLIC FindRegTest
-{
-public:
-    std::vector<CPPUNIT_NS::Test*> operator()(const std::string& reg_expr, CPPUNIT_NS::Test* test);
+    class MOCTEST_DLL_PUBLIC FindRegTest final {
+    public:
+        std::vector<CPPUNIT_NS::Test *> operator()(const std::string &reg_expr, CPPUNIT_NS::Test *test);
 
-protected:
-    std::vector<CPPUNIT_NS::Test*> internal_find(const std::regex& expr, CPPUNIT_NS::Test* test);
-};
+    protected:
+        std::vector<CPPUNIT_NS::Test *> internal_find(const std::regex &expr, CPPUNIT_NS::Test *test);
+    };
 
 }
 
