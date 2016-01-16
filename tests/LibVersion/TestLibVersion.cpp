@@ -56,7 +56,7 @@ void TestLibVersion::test_get_library_version_patch() {
 }
 
 void TestLibVersion::test_get_library_version_string() {
-    const char *expected_version = "0.4.0-dev";
+    const char *expected_version = "0.4.0";
     CPPUNIT_ASSERT_EQUAL(std::string(expected_version), std::string(moctest::get_library_version_string()));
 }
 
