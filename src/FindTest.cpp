@@ -35,10 +35,8 @@
 
 namespace moctest {
 
-    CPPUNIT_NS::Test *FindTest::operator()(const std::string &test_name, CPPUNIT_NS::Test *test) {
-        if (test_name.empty() || !test) {
-            return nullptr;
-        }
+    CPPUNIT_NS::Test *FindTest::operator()(const std::string &test_name, gsl::not_null<CPPUNIT_NS::Test *> test) const {
+        Expects(!test_name.empty());
 
         if (test->getName() == test_name) {
             return test;

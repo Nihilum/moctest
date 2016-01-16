@@ -37,23 +37,24 @@
 namespace moctest {
 
     constexpr uint16_t get_library_version_major() {
-        return 0;
+        return @MOCTEST_LIBRARY_VERSION_MAJOR@;
     }
 
     constexpr uint16_t get_library_version_minor() {
-        return 3;
+        return @MOCTEST_LIBRARY_VERSION_MINOR@;
     }
 
     constexpr uint16_t get_library_version_patch() {
-        return 2;
+        return @MOCTEST_LIBRARY_VERSION_PATCH@;
     }
 
     constexpr const char *get_library_version_string() {
-        return MOCTEST_MACRO_NUMBER_TO_STRING(0)
+        return MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_MAJOR@)
                 "."
-                MOCTEST_MACRO_NUMBER_TO_STRING(3)
+                MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_MINOR@)
                 "."
-                MOCTEST_MACRO_NUMBER_TO_STRING(2);
+                MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_PATCH@)
+                @MOCTEST_LIBRARY_VERSION_TAG@;
     }
 
 }

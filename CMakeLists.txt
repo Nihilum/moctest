@@ -27,14 +27,18 @@ set(MOCTEST_TAG dev)
 set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
-add_definitions(
-  -DMOCTEST_LIBRARY_VERSION_MAJOR=0
-  -DMOCTEST_LIBRARY_VERSION_MINOR=3
-  -DMOCTEST_LIBRARY_VERSION_PATCH=2
-)
+set(MOCTEST_LIBRARY_VERSION_MAJOR 0)
+set(MOCTEST_LIBRARY_VERSION_MINOR 4)
+set(MOCTEST_LIBRARY_VERSION_PATCH 0)
+set(MOCTEST_LIBRARY_VERSION_TAG "\"-dev\"")
 
 # Make sure that we can find all CMake includes
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/MattSource/Libraries)
+
+configure_file (
+        "${CMAKE_SOURCE_DIR}/cmake/LibVersion.hpp.in"
+        "${CMAKE_SOURCE_DIR}/include/moctest/LibVersion.hpp"
+)
 
 include(MattSource/MattSource)
 
@@ -58,6 +62,7 @@ if (USE_DEPS)
   file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
   set(BOOST_ROOT ${DEPS_DIR})
   set(CPPUNIT_ROOT ${DEPS_DIR})
+  set(GSL_ROOT ${DEPS_DIR})
 endif()
 
 set(Boost_USE_STATIC_LIBS OFF)
@@ -66,6 +71,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 find_package(cppunit REQUIRED)
+find_package(GSL REQUIRED)
 
 # Prepare project
 
@@ -74,8 +80,8 @@ if(WIN32 AND NOT MINGW)
   # Disable dll-external warnings for Visual Studio; [/GS-] disable buffer overflow security checks (optimization)
   set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-DMOCTEST_DLL=1 /wd4251 /wd4275 /wd4351 /GS-")
 else()
-  # Activate C++11 mode for GNU/GCC
-  set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-std=c++11 -DMOCTEST_DLL=1")
+  # Activate C++14 mode for GNU/GCC
+  set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-std=c++14 -DMOCTEST_DLL=1")
 endif()
 
 # Source files and includes
@@ -89,15 +95,17 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/include/
   ${CPPUNIT_INCLUDE_DIR}/
   ${Boost_INCLUDE_DIR}
+  ${GSL_INCLUDE_DIR}
 )
 
 # Compilation definitions
 add_definitions( ${Boost_LIB_DIAGNOSTIC_DEFINITIONS} ) # http://www.cmake.org/cmake/help/v3.2/module/FindBoost.html
 add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
+add_definitions( -DGSL_THROW_ON_CONTRACT_VIOLATION )
 
 if (MINGW)
   #add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
-  add_definitions(-std=c++11)
+  add_definitions(-std=c++14)
 endif()
 
 # Properly setup RPATH (Linux)

@@ -32,6 +32,7 @@
 
 #include <cppunit/TestRunner.h>
 #include <cppunit/TestResult.h>
+#include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/BriefTestProgressListener.h>
 
@@ -45,6 +46,12 @@ namespace moctest {
 
     class MOCTEST_DLL_PUBLIC Framework final {
     public:
+        using ReturnCode = int;
+
+        static const Framework::ReturnCode SUCCESS = 0;
+        static const Framework::ReturnCode FAILURE = 1;
+
+    public:
         Framework(int argc, char **argv);
 
         template<typename T>
@@ -53,13 +60,21 @@ namespace moctest {
             get_registry()->registerFactory(&factory);
         }
 
-        int run();
+        ReturnCode run();
 
-    protected:
-        CPPUNIT_NS::TestFactoryRegistry *get_registry();
+    private:
+        CPPUNIT_NS::TestFactoryRegistry *get_registry() const;
 
-    protected:
-        ProgramOptions m_po;
+        ReturnCode help() const;
+
+        ReturnCode list() const;
+
+        bool combine_tests_subset(CPPUNIT_NS::TextUi::TestRunner &runner) const;
+
+        bool combine_regtest_subset(CPPUNIT_NS::TextUi::TestRunner &runner) const;
+
+    private:
+        ProgramOptions m_program_options;
     };
 
 }

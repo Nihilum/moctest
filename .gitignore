@@ -20,3 +20,6 @@ deps/
 *.lai
 *.la
 *.a
+
+# Configured file
+include/moctest/LibVersion.hpp

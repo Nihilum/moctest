@@ -30,6 +30,8 @@
 #ifndef MOCTEST_LISTTESTS_HPP
 #define MOCTEST_LISTTESTS_HPP
 
+#include <gsl.h>
+
 #include <cstdint>
 #include <sstream>
 
@@ -45,9 +47,9 @@ namespace moctest {
     public:
         ListTests();
 
-        void operator()(std::stringstream &sStr, CPPUNIT_NS::Test *test, uint16_t tabs = 0);
+        void operator()(std::stringstream &sStr, gsl::not_null<CPPUNIT_NS::Test *> test, uint16_t tabs = 0);
 
-    protected:
+    private:
         bool m_top_level;
     };
 

@@ -18,43 +18,32 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#
+# Find the GSL includes
+#
+# This module defines
+# GSL_INCLUDE_DIR, where to find gsl.h, etc.
+# GSL_FOUND, If false, do not try to use GSL.
 
-set(TEST_NAME moctest_find_test)
 
-set(TEST_SRCS
-  TestFindTest.hpp
-  TestFindTest.cpp
+file(GLOB DEPS_DIR ${GSL_ROOT})
+
+foreach(DEP ${DEPS_DIR})
+  if(DEP MATCHES "gsl.*")
+    set(GSL_PATH ${DEP})
+  endif()
+endforeach()
+
+FIND_PATH(GSL_INCLUDE_DIR gsl.h
+  ${GSL_PATH}/include
+  /usr/local/include
+  /usr/include
 )
 
-if(WIN32 AND NOT MINGW)
-  # Disable dll-external warnings for Visual Studio; [/GS-] disable buffer overflow security checks (optimization)
-  set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "/wd4251 /wd4275 /GS-")
-else()
-  # Activate C++11 mode for GNU/GCC; set rpath to $ORIGIN so the shared library can be easily found
-  set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "-std=c++14")
+IF(GSL_INCLUDE_DIR)
+  SET(GSL_FOUND "YES")
+ENDIF(GSL_INCLUDE_DIR)
+
+if(GSL_FIND_REQUIRED AND NOT GSL_FOUND)
+  message(SEND_ERROR "Unable to find the requested gsl includes. Make sure they are downloaded.")
 endif()
-
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
-SET(CMAKE_INSTALL_RPATH "\$ORIGIN")
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-if(NOT DEFINED WIN32 AND NOT DEFINED MINGW)
-  SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--enable-new-dtags")
-endif()
-
-link_directories(${Boost_LIBRARY_DIR})
-
-add_executable(${TEST_NAME} ${TEST_SRCS})
-
-target_link_libraries(${TEST_NAME}
-  ${MOCTEST_LIB}
-  debug ${CPPUNIT_DEBUG_LIBRARY}
-  optimized ${CPPUNIT_LIBRARY}
-)
-
-set_target_properties(${TEST_NAME} PROPERTIES COMPILE_FLAGS
-  "${PROGRAM_COMPILE_FLAGS}"
-)
-
-install(TARGETS ${TEST_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)

@@ -29,8 +29,9 @@
 
 #include <sstream>
 
+#include <gsl.h>
+
 #include <cppunit/CompilerOutputter.h>
-#include <cppunit/ui/text/TestRunner.h>
 
 #include <moctest/FindTest.hpp>
 #include <moctest/ListTests.hpp>
@@ -38,61 +39,27 @@
 #include <moctest/Framework/Framework.hpp>
 
 namespace moctest {
-
     Framework::Framework(int argc, char **argv)
-            : m_po(argc, argv) {
+            : m_program_options(argc, argv) {
     }
 
-    int Framework::run() {
-        if (!m_po.parse_options()) {
-            return 1;
+    Framework::ReturnCode Framework::run() {
+        Ensures(m_program_options.parse_options());
+
+        if (m_program_options.asked_for_help()) {
+            return help();
         }
 
-        if (m_po.asked_for_help()) {
-            std::cout << "Possible options:\n";
-            std::cout << "--help (-h)\tshows this help message\n";
-            std::cout << "--list (-l)\tshows the list of all possible tests\n";
-            std::cout << "--test (-t) <test_name1> [<test_name2>...]\truns given tests only\n";
-            std::cout << "--regtest (-r) <name_regex> runs only tests which names match given regexp\n";
-            return 0;
-        }
-
-        if (m_po.asked_for_list()) {
-            std::stringstream sStr;
-            ListTests list_tests;
-            list_tests(sStr, get_registry()->makeTest());
-            std::cout << sStr.str() << std::endl;
-            return 0;
+        if (m_program_options.asked_for_list()) {
+            return list();
         }
 
         CPPUNIT_NS::TextUi::TestRunner runner;
 
-        if (m_po.asked_to_run_only_some_tests()) {
-            FindTest find_test;
-
-            for (auto &name : m_po.get_tests_to_run()) {
-                CPPUNIT_NS::Test *test = find_test(name, get_registry()->makeTest());
-
-                if (test == nullptr) {
-                    std::cerr << "Cannot find test '" << name << "'!" << std::endl;
-                    return 1;
-                }
-
-                runner.addTest(test);
-            }
-        } else if (m_po.asked_for_regtest()) {
-            FindRegTest find_regtest;
-
-            try {
-                auto tests_to_run = find_regtest(m_po.get_regtest(), get_registry()->makeTest());
-
-                for (auto &test : tests_to_run) {
-                    runner.addTest(test);
-                }
-            } catch (const std::exception &e) {
-                std::cerr << "Cannot match your regexp: " << e.what() << std::endl;
-                return 1;
-            }
+        if (m_program_options.asked_to_run_only_some_tests()) {
+            Ensures(combine_tests_subset(runner));
+        } else if (m_program_options.asked_for_regtest()) {
+            Ensures(combine_regtest_subset(runner));
         } else {
             runner.addTest(get_registry()->makeTest());
         }
@@ -109,11 +76,61 @@ namespace moctest {
         CPPUNIT_NS::CompilerOutputter outputter(&result, std::cerr);
         outputter.write();
 
-        return result.wasSuccessful() ? 0 : 1;
+        return result.wasSuccessful() ? SUCCESS : FAILURE;
     }
 
-    CPPUNIT_NS::TestFactoryRegistry *Framework::get_registry() {
+    CPPUNIT_NS::TestFactoryRegistry *Framework::get_registry() const {
         return &CPPUNIT_NS::TestFactoryRegistry::getRegistry();
     }
 
+    Framework::ReturnCode Framework::help() const {
+        std::cout << "Possible options:\n";
+        std::cout << "--help (-h)\tshows this help message\n";
+        std::cout << "--list (-l)\tshows the list of all possible tests\n";
+        std::cout << "--test (-t) <test_name1> [<test_name2>...]\truns given tests only\n";
+        std::cout << "--regtest (-r) <name_regex> runs only tests which names match given regexp\n";
+        return SUCCESS;
+    }
+
+    Framework::ReturnCode Framework::list() const {
+        std::stringstream sStr;
+        ListTests list_tests;
+        list_tests(sStr, get_registry()->makeTest());
+        std::cout << sStr.str() << std::endl;
+        return SUCCESS;
+    }
+
+    bool Framework::combine_tests_subset(CPPUNIT_NS::TextUi::TestRunner &runner) const {
+        FindTest find_test;
+
+        for (auto &name : m_program_options.get_tests_to_run()) {
+            CPPUNIT_NS::Test *test = find_test(name, get_registry()->makeTest());
+
+            if (test == nullptr) {
+                std::cerr << "Cannot find test '" << name << "'!" << std::endl;
+                return false;
+            }
+
+            runner.addTest(test);
+        }
+
+        return true;
+    }
+
+    bool Framework::combine_regtest_subset(CPPUNIT_NS::TextUi::TestRunner &runner) const {
+        FindRegTest find_regtest;
+
+        try {
+            auto tests_to_run = find_regtest(m_program_options.get_regtest(), get_registry()->makeTest());
+
+            for (auto &test : tests_to_run) {
+                runner.addTest(test);
+            }
+        } catch (const std::exception &e) {
+            std::cerr << "Cannot match your regexp: " << e.what() << std::endl;
+            return false;
+        }
+
+        return true;
+    }
 }

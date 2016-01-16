@@ -30,6 +30,8 @@
 #ifndef MOCTEST_FINDREGTEST_HPP
 #define MOCTEST_FINDREGTEST_HPP
 
+#include <gsl.h>
+
 #include <regex>
 #include <vector>
 
@@ -43,10 +45,14 @@ namespace moctest {
 
     class MOCTEST_DLL_PUBLIC FindRegTest final {
     public:
-        std::vector<CPPUNIT_NS::Test *> operator()(const std::string &reg_expr, CPPUNIT_NS::Test *test);
+        using TestsList = std::vector<CPPUNIT_NS::Test *>;
+        using RegularExpression = std::string;
 
-    protected:
-        std::vector<CPPUNIT_NS::Test *> internal_find(const std::regex &expr, CPPUNIT_NS::Test *test);
+    public:
+        TestsList operator()(const RegularExpression &reg_expr, gsl::not_null<CPPUNIT_NS::Test *> test) const;
+
+    private:
+        TestsList internal_find(const std::regex &expr, gsl::not_null<CPPUNIT_NS::Test *> test) const;
     };
 
 }

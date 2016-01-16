@@ -41,31 +41,22 @@ void TestLibVersion::tearDown() {
 }
 
 void TestLibVersion::test_get_library_version_major() {
-    uint16_t expected_major_version = MOCTEST_LIBRARY_VERSION_MAJOR;
+    uint16_t expected_major_version = 0;
     CPPUNIT_ASSERT_EQUAL(expected_major_version, moctest::get_library_version_major());
 }
 
 void TestLibVersion::test_get_library_version_minor() {
-    uint16_t expected_minor_version = MOCTEST_LIBRARY_VERSION_MINOR;
+    uint16_t expected_minor_version = 4;
     CPPUNIT_ASSERT_EQUAL(expected_minor_version, moctest::get_library_version_minor());
 }
 
 void TestLibVersion::test_get_library_version_patch() {
-    uint16_t expected_patch_version = MOCTEST_LIBRARY_VERSION_PATCH;
+    uint16_t expected_patch_version = 0;
     CPPUNIT_ASSERT_EQUAL(expected_patch_version, moctest::get_library_version_patch());
 }
 
 void TestLibVersion::test_get_library_version_string() {
-    char version[6] = {
-            static_cast<char>(MOCTEST_LIBRARY_VERSION_MAJOR + 48),
-            '.',
-            static_cast<char>(MOCTEST_LIBRARY_VERSION_MINOR + 48),
-            '.',
-            static_cast<char>(MOCTEST_LIBRARY_VERSION_PATCH + 48),
-            '\0'
-    };
-
-    const char *expected_version = version;
+    const char *expected_version = "0.4.0-dev";
     CPPUNIT_ASSERT_EQUAL(std::string(expected_version), std::string(moctest::get_library_version_string()));
 }
 
