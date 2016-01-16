@@ -28,8 +28,8 @@ set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
 set(MOCTEST_LIBRARY_VERSION_MAJOR 0)
-set(MOCTEST_LIBRARY_VERSION_MINOR 3)
-set(MOCTEST_LIBRARY_VERSION_PATCH 2)
+set(MOCTEST_LIBRARY_VERSION_MINOR 4)
+set(MOCTEST_LIBRARY_VERSION_PATCH 0)
 set(MOCTEST_LIBRARY_VERSION_TAG "\"-dev\"")
 
 # Make sure that we can find all CMake includes
@@ -80,8 +80,8 @@ if(WIN32 AND NOT MINGW)
   # Disable dll-external warnings for Visual Studio; [/GS-] disable buffer overflow security checks (optimization)
   set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-DMOCTEST_DLL=1 /wd4251 /wd4275 /wd4351 /GS-")
 else()
-  # Activate C++11 mode for GNU/GCC
-  set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-std=c++11 -DMOCTEST_DLL=1")
+  # Activate C++14 mode for GNU/GCC
+  set(LIBRARY_COMPILE_FLAGS ${LIBRARY_COMPILE_FLAGS} "-std=c++14 -DMOCTEST_DLL=1")
 endif()
 
 # Source files and includes
@@ -95,6 +95,7 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/include/
   ${CPPUNIT_INCLUDE_DIR}/
   ${Boost_INCLUDE_DIR}
+  ${GSL_INCLUDE_DIR}
 )
 
 # Compilation definitions
@@ -103,7 +104,7 @@ add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
 
 if (MINGW)
   #add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
-  add_definitions(-std=c++11)
+  add_definitions(-std=c++14)
 endif()
 
 # Properly setup RPATH (Linux)

@@ -41,19 +41,19 @@ namespace moctest {
     }
 
     constexpr uint16_t get_library_version_minor() {
-        return 3;
+        return 4;
     }
 
     constexpr uint16_t get_library_version_patch() {
-        return 2;
+        return 0;
     }
 
     constexpr const char *get_library_version_string() {
         return MOCTEST_MACRO_NUMBER_TO_STRING(0)
                 "."
-                MOCTEST_MACRO_NUMBER_TO_STRING(3)
+                MOCTEST_MACRO_NUMBER_TO_STRING(4)
                 "."
-                MOCTEST_MACRO_NUMBER_TO_STRING(2)
+                MOCTEST_MACRO_NUMBER_TO_STRING(0)
                 "-dev";
     }
 

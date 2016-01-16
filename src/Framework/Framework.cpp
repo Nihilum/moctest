@@ -46,9 +46,7 @@ namespace moctest {
     }
 
     Framework::ReturnCode Framework::run() {
-        if (!m_po.parse_options()) {
-            return 1;
-        }
+        Ensures(m_po.parse_options());
 
         if (m_po.asked_for_help()) {
             std::cout << "Possible options:\n";
