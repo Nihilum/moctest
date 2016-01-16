@@ -57,14 +57,14 @@ IF(WIN32 AND NOT MINGW)
                ${CPPUNIT_PATH_RELEASE}/lib
                ${CPPUNIT_INCLUDE_DIR}/../lib)
   FIND_LIBRARY(CPPUNIT_LIBRARY_INSTALL cppunit_dll
-          ${CPPUNIT_PATH_RELEASE}/bin
-          ${CPPUNIT_INCLUDE_DIR}/../bin)
+          ${CPPUNIT_PATH_RELEASE}/lib
+          ${CPPUNIT_INCLUDE_DIR}/../lib)
   FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY cppunitd_dll
                ${CPPUNIT_PATH_DEBUG}/lib
                ${CPPUNIT_INCLUDE_DIR}/../lib)
   FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY_INSTALL cppunitd_dll
-          ${CPPUNIT_PATH_DEBUG}/bin
-          ${CPPUNIT_INCLUDE_DIR}/../bin)
+          ${CPPUNIT_PATH_DEBUG}/lib
+          ${CPPUNIT_INCLUDE_DIR}/../lib)
 ELSE(WIN32 AND NOT MINGW)
   # On unix system, debug and release have the same name
   FIND_LIBRARY(CPPUNIT_LIBRARY cppunit
