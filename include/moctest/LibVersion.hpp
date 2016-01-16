@@ -53,7 +53,8 @@ namespace moctest {
                 "."
                 MOCTEST_MACRO_NUMBER_TO_STRING(3)
                 "."
-                MOCTEST_MACRO_NUMBER_TO_STRING(2);
+                MOCTEST_MACRO_NUMBER_TO_STRING(2)
+                "-dev";
     }
 
 }

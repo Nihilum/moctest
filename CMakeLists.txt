@@ -27,14 +27,18 @@ set(MOCTEST_TAG dev)
 set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
-add_definitions(
-  -DMOCTEST_LIBRARY_VERSION_MAJOR=0
-  -DMOCTEST_LIBRARY_VERSION_MINOR=3
-  -DMOCTEST_LIBRARY_VERSION_PATCH=2
-)
+set(MOCTEST_LIBRARY_VERSION_MAJOR 0)
+set(MOCTEST_LIBRARY_VERSION_MINOR 3)
+set(MOCTEST_LIBRARY_VERSION_PATCH 2)
+set(MOCTEST_LIBRARY_VERSION_TAG "\"-dev\"")
 
 # Make sure that we can find all CMake includes
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/MattSource/Libraries)
+
+configure_file (
+        "${CMAKE_SOURCE_DIR}/cmake/LibVersion.hpp.in"
+        "${CMAKE_SOURCE_DIR}/include/moctest/LibVersion.hpp"
+)
 
 include(MattSource/MattSource)
 

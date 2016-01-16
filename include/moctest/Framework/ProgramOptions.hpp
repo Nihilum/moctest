@@ -50,30 +50,28 @@ namespace moctest {
 
     class MOCTEST_DLL_PUBLIC ProgramOptions final {
     public:
-        ProgramOptions(int argc, char **argv);
+        typedef std::vector<std::string> TestsList;
+        typedef std::string RegularExpression;
+        typedef std::unique_ptr<po::variables_map> ProgramVariables;
 
+        ProgramOptions(int argc, char **argv);
         ~ProgramOptions();
 
         bool parse_options();
-
         bool asked_for_help() const;
-
         bool asked_for_list() const;
-
         bool asked_to_run_only_some_tests() const;
-
         bool asked_for_regtest() const;
 
-        const std::vector<std::string> &get_tests_to_run() const { return m_tests; }
+        const TestsList &get_tests_to_run() const { return m_tests; }
+        const RegularExpression &get_regtest() const { return m_regtest; }
 
-        const std::string &get_regtest() const { return m_regtest; }
-
-    protected:
+    private:
         int m_argc;
         char **m_argv;
-        std::unique_ptr<po::variables_map> m_vm;
-        std::vector<std::string> m_tests;
-        std::string m_regtest;
+        ProgramVariables m_vm;
+        TestsList m_tests;
+        RegularExpression m_regtest;
     };
 
 }

@@ -30,7 +30,7 @@
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/ui/text/TestRunner.h>
 
-#include <moctest/LibVersion.hpp>
+#include "LibVersion.hpp.in"
 
 #include "TestLibVersion.hpp"
 

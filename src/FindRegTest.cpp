@@ -35,7 +35,8 @@
 
 namespace moctest {
 
-    std::vector<CPPUNIT_NS::Test *> FindRegTest::operator()(const std::string &reg_expr, CPPUNIT_NS::Test *test) {
+    FindRegTest::TestsList FindRegTest::operator()(const FindRegTest::RegularExpression &reg_expr,
+                                                   CPPUNIT_NS::Test *test) const {
         if (reg_expr.empty() || !test) {
             return std::vector<CPPUNIT_NS::Test *>();
         }
@@ -44,7 +45,7 @@ namespace moctest {
         return internal_find(expr, test);
     }
 
-    std::vector<CPPUNIT_NS::Test *> FindRegTest::internal_find(const std::regex &expr, CPPUNIT_NS::Test *test) {
+    FindRegTest::TestsList FindRegTest::internal_find(const std::regex &expr, CPPUNIT_NS::Test *test) const {
         std::vector<CPPUNIT_NS::Test *> foundTests;
 
         if (!test) {

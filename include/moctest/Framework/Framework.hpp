@@ -45,6 +45,8 @@ namespace moctest {
 
     class MOCTEST_DLL_PUBLIC Framework final {
     public:
+        typedef int ReturnCode;
+
         Framework(int argc, char **argv);
 
         template<typename T>
@@ -53,12 +55,12 @@ namespace moctest {
             get_registry()->registerFactory(&factory);
         }
 
-        int run();
+        ReturnCode run();
 
-    protected:
+    private:
         CPPUNIT_NS::TestFactoryRegistry *get_registry();
 
-    protected:
+    private:
         ProgramOptions m_po;
     };
 

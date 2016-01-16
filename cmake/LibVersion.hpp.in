@@ -22,36 +22,41 @@
  */
 
 /**
- * @file moctest/FindRegTest.hpp
+ * @file moctest/LibVersion.hpp
  *
- * @desc FindRegTest functor.
+ * @desc constexpr functions providing information about library version.
  */
 
-#ifndef MOCTEST_FINDREGTEST_HPP
-#define MOCTEST_FINDREGTEST_HPP
+#ifndef MOCTEST_LIB_VERSION_HPP
+#define MOCTEST_LIB_VERSION_HPP
 
-#include <regex>
-#include <vector>
+#include <cstdint>
 
 #include <moctest/Config.hpp>
 
-namespace CPPUNIT_NS {
-    class Test;
-}
-
 namespace moctest {
 
-    class MOCTEST_DLL_PUBLIC FindRegTest final {
-    public:
-        typedef std::vector<CPPUNIT_NS::Test *> TestsList;
-        typedef std::string RegularExpression;
+    constexpr uint16_t get_library_version_major() {
+        return @MOCTEST_LIBRARY_VERSION_MAJOR@;
+    }
 
-        TestsList operator()(const RegularExpression &reg_expr, CPPUNIT_NS::Test *test) const;
+    constexpr uint16_t get_library_version_minor() {
+        return @MOCTEST_LIBRARY_VERSION_MINOR@;
+    }
 
-    private:
-        TestsList internal_find(const std::regex &expr, CPPUNIT_NS::Test *test) const;
-    };
+    constexpr uint16_t get_library_version_patch() {
+        return @MOCTEST_LIBRARY_VERSION_PATCH@;
+    }
+
+    constexpr const char *get_library_version_string() {
+        return MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_MAJOR@)
+                "."
+                MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_MINOR@)
+                "."
+                MOCTEST_MACRO_NUMBER_TO_STRING(@MOCTEST_LIBRARY_VERSION_PATCH@)
+                @MOCTEST_LIBRARY_VERSION_TAG@;
+    }
 
 }
 
-#endif // MOCTEST_FINDREGTEST_HPP
+#endif // MOCTEST_LIB_VERSION_HPP
