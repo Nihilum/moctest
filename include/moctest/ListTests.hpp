@@ -47,7 +47,7 @@ namespace moctest {
 
         void operator()(std::stringstream &sStr, CPPUNIT_NS::Test *test, uint16_t tabs = 0);
 
-    protected:
+    private:
         bool m_top_level;
     };
 

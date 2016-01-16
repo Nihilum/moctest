@@ -31,7 +31,7 @@ if(WIN32 AND NOT MINGW)
   set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "/wd4251 /wd4275 /GS-")
 else()
   # Activate C++11 mode for GNU/GCC; set rpath to $ORIGIN so the shared library can be easily found
-  set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "-std=c++11")
+  set(PROGRAM_COMPILE_FLAGS ${PROGRAM_COMPILE_FLAGS} "-std=c++14")
 endif()
 
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)

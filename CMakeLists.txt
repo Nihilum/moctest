@@ -101,6 +101,7 @@ include_directories(
 # Compilation definitions
 add_definitions( ${Boost_LIB_DIAGNOSTIC_DEFINITIONS} ) # http://www.cmake.org/cmake/help/v3.2/module/FindBoost.html
 add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
+add_definitions( -DGSL_THROW_ON_CONTRACT_VIOLATION )
 
 if (MINGW)
   #add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h

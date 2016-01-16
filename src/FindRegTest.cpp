@@ -36,24 +36,18 @@
 namespace moctest {
 
     FindRegTest::TestsList FindRegTest::operator()(const FindRegTest::RegularExpression &reg_expr,
-                                                   CPPUNIT_NS::Test *test) const {
-        if (reg_expr.empty() || !test) {
-            return std::vector<CPPUNIT_NS::Test *>();
-        }
-
+                                                   gsl::not_null<CPPUNIT_NS::Test *> test) const {
+        Expects(!reg_expr.empty());
         std::regex expr(reg_expr);
         return internal_find(expr, test);
     }
 
-    FindRegTest::TestsList FindRegTest::internal_find(const std::regex &expr, CPPUNIT_NS::Test *test) const {
+    FindRegTest::TestsList FindRegTest::internal_find(const std::regex &expr,
+                                                      gsl::not_null<CPPUNIT_NS::Test *> test) const {
         std::vector<CPPUNIT_NS::Test *> foundTests;
 
-        if (!test) {
-            return foundTests;
-        }
-
         if (std::regex_match(test->getName(), expr)) {
-            foundTests.push_back(test);
+            foundTests.push_back(test.get());
             return foundTests; // since we have added parent, all children are included
         }
 

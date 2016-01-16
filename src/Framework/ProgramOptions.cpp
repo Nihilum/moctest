@@ -35,8 +35,11 @@
 
 namespace moctest {
 
-    ProgramOptions::ProgramOptions(int argc, char **argv)
-            : m_argc(argc), m_argv(argv), m_vm(new po::variables_map) {
+    using Count = int;
+    const Count ONE_OCCURRENCE = 1;
+
+    ProgramOptions::ProgramOptions(int argc, const char *const *argv)
+            : m_argc(argc), m_argv(argv), m_program_variables(std::make_unique<po::variables_map>()) {
     }
 
     ProgramOptions::~ProgramOptions() {
@@ -53,8 +56,8 @@ namespace moctest {
                 ("regtest,r", po::value<std::string>(&m_regtest), "runs only tests which names match given regexp");
 
         try {
-            store(po::command_line_parser(m_argc, m_argv).options(po_cmdline).run(), *m_vm);
-            notify(*m_vm);
+            store(po::command_line_parser(m_argc, m_argv).options(po_cmdline).run(), *m_program_variables);
+            notify(*m_program_variables);
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
             return false;
@@ -63,12 +66,14 @@ namespace moctest {
         return true;
     }
 
-    bool ProgramOptions::asked_for_help() const { return m_vm->count("help") >= 1; }
+    bool ProgramOptions::asked_for_help() const { return m_program_variables->count("help") >= ONE_OCCURRENCE; }
 
-    bool ProgramOptions::asked_for_list() const { return m_vm->count("list") >= 1; }
+    bool ProgramOptions::asked_for_list() const { return m_program_variables->count("list") >= ONE_OCCURRENCE; }
 
-    bool ProgramOptions::asked_to_run_only_some_tests() const { return m_vm->count("test") >= 1; }
+    bool ProgramOptions::asked_to_run_only_some_tests() const {
+        return m_program_variables->count("test") >= ONE_OCCURRENCE;
+    }
 
-    bool ProgramOptions::asked_for_regtest() const { return m_vm->count("regtest") >= 1; }
+    bool ProgramOptions::asked_for_regtest() const { return m_program_variables->count("regtest") >= ONE_OCCURRENCE; }
 
 }
