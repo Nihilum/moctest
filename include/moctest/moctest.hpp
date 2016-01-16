@@ -32,7 +32,7 @@
 
 #include <moctest/FindTest.hpp>
 #include <moctest/ListTests.hpp>
-#include "LibVersion.hpp.in"
+#include <moctest/LibVersion.hpp>
 #include <moctest/FindRegTest.hpp>
 #include <moctest/Framework/Framework.hpp>
 

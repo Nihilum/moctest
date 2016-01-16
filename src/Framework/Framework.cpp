@@ -29,6 +29,8 @@
 
 #include <sstream>
 
+#include <gsl.h>
+
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/ui/text/TestRunner.h>
 
@@ -43,7 +45,7 @@ namespace moctest {
             : m_po(argc, argv) {
     }
 
-    int Framework::run() {
+    Framework::ReturnCode Framework::run() {
         if (!m_po.parse_options()) {
             return 1;
         }

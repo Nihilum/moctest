@@ -62,6 +62,7 @@ if (USE_DEPS)
   file(GLOB DEPS_DIR ${CMAKE_SOURCE_DIR}/deps/*)
   set(BOOST_ROOT ${DEPS_DIR})
   set(CPPUNIT_ROOT ${DEPS_DIR})
+  set(GSL_ROOT ${DEPS_DIR})
 endif()
 
 set(Boost_USE_STATIC_LIBS OFF)
@@ -70,6 +71,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 find_package(Boost REQUIRED COMPONENTS program_options)
 find_package(cppunit REQUIRED)
+find_package(GSL REQUIRED)
 
 # Prepare project
 
