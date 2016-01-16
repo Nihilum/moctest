@@ -22,15 +22,15 @@
 cmake_minimum_required(VERSION 3.2.2)
 project(moctest CXX)
 
-set(MOCTEST_VERSION 0.3.2)
-set(MOCTEST_TAG dev)
+set(MOCTEST_VERSION 0.4.0)
+set(MOCTEST_TAG)
 set(MOCTEST_EMAIL matt@mattsource.com)
 set(LIBRARY_NAME moctest)
 
 set(MOCTEST_LIBRARY_VERSION_MAJOR 0)
 set(MOCTEST_LIBRARY_VERSION_MINOR 4)
 set(MOCTEST_LIBRARY_VERSION_PATCH 0)
-set(MOCTEST_LIBRARY_VERSION_TAG "\"-dev\"")
+set(MOCTEST_LIBRARY_VERSION_TAG "\"\"")
 
 # Make sure that we can find all CMake includes
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/MattSource/Libraries)
@@ -104,7 +104,6 @@ add_definitions( -DBOOST_ALL_DYN_LINK ) # use boost dlls
 add_definitions( -DGSL_THROW_ON_CONTRACT_VIOLATION )
 
 if (MINGW)
-  #add_definitions( -D_GLIBCXX_HAVE_STDINT_H ) # cstdint -> stdint.h
   add_definitions(-std=c++14)
 endif()
 
@@ -152,6 +151,15 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include
 
 # Install Boost libraries and cppunit library.
 if (WIN32)
+  if (MSVC)
+    string(REPLACE ".lib" ".dll" Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE})
+    string(REPLACE ".lib" ".dll" Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG})
+    string(REPLACE ".lib" ".dll" CPPUNIT_LIBRARY_INSTALL ${CPPUNIT_LIBRARY_INSTALL})
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+      string(REPLACE ".lib" ".dll" CPPUNIT_DEBUG_LIBRARY_INSTALL ${CPPUNIT_DEBUG_LIBRARY_INSTALL})
+    endif()
+  endif()
+
   install(FILES "${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
   install(FILES "${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
   install(FILES "${CPPUNIT_LIBRARY_INSTALL}" DESTINATION ${CMAKE_INSTALL_PREFIX}/tests)
