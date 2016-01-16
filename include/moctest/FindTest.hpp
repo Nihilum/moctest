@@ -30,6 +30,8 @@
 #ifndef MOCTEST_FINDTEST_HPP
 #define MOCTEST_FINDTEST_HPP
 
+#include <gsl.h>
+
 #include <string>
 
 #include <moctest/Config.hpp>
@@ -42,7 +44,7 @@ namespace moctest {
 
     class MOCTEST_DLL_PUBLIC FindTest final {
     public:
-        CPPUNIT_NS::Test *operator()(const std::string &test_name, CPPUNIT_NS::Test *test) const;
+        CPPUNIT_NS::Test *operator()(const std::string &test_name, gsl::not_null<CPPUNIT_NS::Test *> test) const;
     };
 
 }

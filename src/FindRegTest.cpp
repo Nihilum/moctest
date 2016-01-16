@@ -42,6 +42,9 @@ namespace moctest {
         return internal_find(expr, test);
     }
 
+    /**
+     * Travere through the test tree and find test names that are matching the given regular expression.
+     */
     FindRegTest::TestsList FindRegTest::internal_find(const std::regex &expr,
                                                       gsl::not_null<CPPUNIT_NS::Test *> test) const {
         std::vector<CPPUNIT_NS::Test *> foundTests;

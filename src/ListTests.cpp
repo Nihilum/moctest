@@ -37,11 +37,7 @@ namespace moctest {
             : m_top_level(true) {
     }
 
-    void ListTests::operator()(std::stringstream &sStr, CPPUNIT_NS::Test *test, uint16_t tabs) {
-        if (test == nullptr) {
-            return;
-        }
-
+    void ListTests::operator()(std::stringstream &sStr, gsl::not_null<CPPUNIT_NS::Test *> test, uint16_t tabs) {
         bool local_level = m_top_level;
 
         if (m_top_level) {
