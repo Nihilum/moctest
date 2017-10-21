@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2016 Mateusz Kolodziejski
+ * Copyright (c) 2014-2017 Mateusz Kolodziejski
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -46,7 +46,7 @@ void TestLibVersion::test_get_library_version_major() {
 }
 
 void TestLibVersion::test_get_library_version_minor() {
-    uint16_t expected_minor_version = 4;
+    uint16_t expected_minor_version = 5;
     CPPUNIT_ASSERT_EQUAL(expected_minor_version, moctest::get_library_version_minor());
 }
 
@@ -56,7 +56,7 @@ void TestLibVersion::test_get_library_version_patch() {
 }
 
 void TestLibVersion::test_get_library_version_string() {
-    const char *expected_version = "0.4.0";
+    const char *expected_version = "0.5.0";
     CPPUNIT_ASSERT_EQUAL(std::string(expected_version), std::string(moctest::get_library_version_string()));
 }
 

@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2016 Mateusz Kolodziejski
+# Copyright (c) 2014-2017 Mateusz Kolodziejski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -24,8 +24,8 @@ include(MattSource/Dependencies/GetNexusOS)
 include(MattSource/Dependencies/GetNexusAddressModel)
 include(MattSource/Dependencies/GetNexusPlatformCompiler)
 
-function(MSource_GetNexusSettings MSOURCE_NEXUS_URL MSOURCE_NEXUS_USERNAME MSOURCE_NEXUS_PASSWORD MSOURCE_NEXUS_OS MSOURCE_NEXUS_ADDRESS_MODEL MSOURCE_NEXUS_PLATFORM_COMPILER)
-  MSource_GetNexusFile(TMP_NEXUS_URL TMP_NEXUS_USERNAME TMP_NEXUS_PASSWORD)
+function(MSource_GetNexusSettings MSOURCE_NEXUS_URL MSOURCE_NEXUS_USERNAME MSOURCE_NEXUS_PASSWORD MSOURCE_NEXUS_VERSION MSOURCE_NEXUS_OS MSOURCE_NEXUS_ADDRESS_MODEL MSOURCE_NEXUS_PLATFORM_COMPILER)
+  MSource_GetNexusFile(TMP_NEXUS_URL TMP_NEXUS_USERNAME TMP_NEXUS_PASSWORD TMP_NEXUS_VERSION)
   MSource_GetNexusOS(TMP_NEXUS_OS)
   MSource_GetNexusAddressModel(TMP_NEXUS_ADRESS_MODEL)
   MSource_GetNexusPlatformCompiler(TMP_NEXUS_COMPILER_PLATFORM TMP_NEXUS_OS)
@@ -33,6 +33,7 @@ function(MSource_GetNexusSettings MSOURCE_NEXUS_URL MSOURCE_NEXUS_USERNAME MSOUR
   set(${MSOURCE_NEXUS_URL} ${TMP_NEXUS_URL} PARENT_SCOPE)
   set(${MSOURCE_NEXUS_USERNAME} ${TMP_NEXUS_USERNAME} PARENT_SCOPE)
   set(${MSOURCE_NEXUS_PASSWORD} ${TMP_NEXUS_PASSWORD} PARENT_SCOPE)
+  set(${MSOURCE_NEXUS_VERSION} ${TMP_NEXUS_VERSION} PARENT_SCOPE)
 
   set(${MSOURCE_NEXUS_OS} ${TMP_NEXUS_OS} PARENT_SCOPE)
   set(${MSOURCE_NEXUS_ADDRESS_MODEL} ${TMP_NEXUS_ADRESS_MODEL} PARENT_SCOPE)
@@ -41,6 +42,7 @@ function(MSource_GetNexusSettings MSOURCE_NEXUS_URL MSOURCE_NEXUS_USERNAME MSOUR
   unset(TMP_NEXUS_URL)
   unset(TMP_NEXUS_USERNAME)
   unset(TMP_NEXUS_PASSWORD)
+  unset(TMP_NEXUS_VERSION)
 
   unset(TMP_NEXUS_OS)
   unset(TMP_NEXUS_ADRESS_MODEL)

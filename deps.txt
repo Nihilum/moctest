@@ -1,3 +1,3 @@
-org.boost boost 1.60.0
-org.freedesktop cppunit 1.13.2
-com.microsoft gsl 6b82ac3 noarch
+org.boost boost 1.65.1
+org.freedesktop cppunit 1.14.0
+com.microsoft gsl 211e195 noarch

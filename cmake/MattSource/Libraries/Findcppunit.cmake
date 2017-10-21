@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2016 Mateusz Kolodziejski
+# Copyright (c) 2014-2017 Mateusz Kolodziejski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -72,7 +72,7 @@ ELSE(WIN32 AND NOT MINGW)
                ${CPPUNIT_INCLUDE_DIR}/../lib
                /usr/local/lib
                /usr/lib)
-  FIND_LIBRARY(CPPUNIT_LIBRARY_INSTALL cppunit-1-13-0
+  FIND_LIBRARY(CPPUNIT_LIBRARY_INSTALL cppunit-1-14-0
                ${CPPUNIT_PATH_RELEASE}/bin
                ${CPPUNIT_INCLUDE_DIR}/../bin
                /usr/local/lib
@@ -82,7 +82,7 @@ ELSE(WIN32 AND NOT MINGW)
                ${CPPUNIT_INCLUDE_DIR}/../lib
                /usr/local/lib
                /usr/lib)
-  FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY_INSTALL cppunit-1-13-0
+  FIND_LIBRARY(CPPUNIT_DEBUG_LIBRARY_INSTALL cppunit-1-14-0
                ${CPPUNIT_PATH_DEBUG}/bin
                ${CPPUNIT_INCLUDE_DIR}/../bin
                /usr/local/lib

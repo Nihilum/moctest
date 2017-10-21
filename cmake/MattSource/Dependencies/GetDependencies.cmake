@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2014-2016 Mateusz Kolodziejski
+# Copyright (c) 2014-2017 Mateusz Kolodziejski
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -25,8 +25,8 @@ include (MattSource/Dependencies/GetDependency)
 
 function(MSource_GetDependencies)
   message(STATUS "Using Nexus dependencies - reading settings...")
-  MSource_GetNexusSettings(NEXUS_URL NEXUS_USERNAME NEXUS_PASSWORD NEXUS_OS NEXUS_ADDRESS_MODEL NEXUS_PLATFORM_COMPILER)
-  message(STATUS "Developer: ${NEXUS_USERNAME}, Nexus URL: ${NEXUS_URL}")
+  MSource_GetNexusSettings(NEXUS_URL NEXUS_USERNAME NEXUS_PASSWORD NEXUS_VERSION NEXUS_OS NEXUS_ADDRESS_MODEL NEXUS_PLATFORM_COMPILER)
+  message(STATUS "Developer: ${NEXUS_USERNAME}, Nexus URL: ${NEXUS_URL}, Nexus Version: ${NEXUS_VERSION}")
   message(STATUS "Nexus will look for deps using: ${NEXUS_OS}-${NEXUS_ADDRESS_MODEL}-${NEXUS_PLATFORM_COMPILER}")
 
   MSource_GetDepsFile(DEPS_FILE NUM_OF_DEPS)
@@ -43,7 +43,7 @@ function(MSource_GetDependencies)
     else()
       set(TMP_DEP_NOARCH 0)
     endif()
-    MSource_GetDependency(${TMP_DEP_GROUP} ${TMP_DEP_NAME} ${TMP_DEP_VER} ${TMP_DEP_NOARCH} ${NEXUS_URL} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_OS} ${NEXUS_ADDRESS_MODEL} ${NEXUS_PLATFORM_COMPILER})
+    MSource_GetDependency(${TMP_DEP_GROUP} ${TMP_DEP_NAME} ${TMP_DEP_VER} ${TMP_DEP_NOARCH} ${NEXUS_URL} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_VERSION} ${NEXUS_OS} ${NEXUS_ADDRESS_MODEL} ${NEXUS_PLATFORM_COMPILER})
     unset(TMP_DEP_VER)
     unset(TMP_DEP_NAME)
     unset(TMP_DEP_GROUP)
