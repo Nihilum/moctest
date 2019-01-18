@@ -95,7 +95,7 @@ namespace moctest {
     Framework::ReturnCode Framework::list() const {
         std::stringstream sStr;
         ListTests list_tests;
-        list_tests(sStr, get_registry()->makeTest());
+        list_tests(sStr, gsl::not_null<CPPUNIT_NS::Test *>(get_registry()->makeTest()));
         std::cout << sStr.str() << std::endl;
         return SUCCESS;
     }
@@ -104,7 +104,7 @@ namespace moctest {
         FindTest find_test;
 
         for (auto &name : m_program_options.get_tests_to_run()) {
-            CPPUNIT_NS::Test *test = find_test(name, get_registry()->makeTest());
+            CPPUNIT_NS::Test *test = find_test(name, gsl::not_null<CPPUNIT_NS::Test *>(get_registry()->makeTest()));
 
             if (test == nullptr) {
                 std::cerr << "Cannot find test '" << name << "'!" << std::endl;
@@ -121,7 +121,7 @@ namespace moctest {
         FindRegTest find_regtest;
 
         try {
-            auto tests_to_run = find_regtest(m_program_options.get_regtest(), get_registry()->makeTest());
+            auto tests_to_run = find_regtest(m_program_options.get_regtest(), gsl::not_null<CPPUNIT_NS::Test *>(get_registry()->makeTest()));
 
             for (auto &test : tests_to_run) {
                 runner.addTest(test);

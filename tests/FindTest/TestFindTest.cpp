@@ -54,7 +54,7 @@ void TestFindTest::test_find_test() {
     };
 
     std::for_each(vec_tests.begin(), vec_tests.end(), [&](const std::string &test_name) {
-        CPPUNIT_NS::Test *test = test_finder(test_name, CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+        CPPUNIT_NS::Test *test = test_finder(test_name, gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, false, test == nullptr);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, test_name, test->getName());
     });
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 
     moctest::FindTest test_finder;
     CPPUNIT_NS::Test *find_test = test_finder("TestFindTest::test_find_test",
-                                              CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+                                              gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(find_test);
     runner.run(controller);

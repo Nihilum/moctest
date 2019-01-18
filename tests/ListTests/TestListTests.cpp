@@ -61,7 +61,7 @@ void TestListTests::test_list_tests() {
 
     std::stringstream sStr;
     moctest::ListTests tests_lister;
-    tests_lister(sStr, CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    tests_lister(sStr, gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
 
     std::string line;
     while (std::getline(sStr, line)) {
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 
     moctest::FindTest test_finder;
     CPPUNIT_NS::Test *list_tests = test_finder("TestListTests::test_list_tests",
-                                               CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+                                               gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(list_tests);
     runner.run(controller);

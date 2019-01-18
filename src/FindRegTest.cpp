@@ -55,7 +55,7 @@ namespace moctest {
         }
 
         for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-            std::vector<CPPUNIT_NS::Test *> childTests = internal_find(expr, test->getChildTestAt(i));
+            std::vector<CPPUNIT_NS::Test *> childTests = internal_find(expr, gsl::not_null<CPPUNIT_NS::Test *>(test->getChildTestAt(i)));
 
             if (!childTests.empty()) {
                 foundTests.insert(foundTests.end(), childTests.begin(), childTests.end());

@@ -50,7 +50,7 @@ void TestFindRegTest::test_find_regtest() {
             "TestOne::underlying_test_one", "TestOne::underlying_test_two", "TestOne::underlying_test_three",
             "TestTwo::underlying_test_one", "TestTwo::underlying_test_two", "TestTwo::underlying_test_three"
     };
-    auto found_tests = regtest_finder(".*underlying.*", CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+    auto found_tests = regtest_finder(".*underlying.*", gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
 
     std::for_each(found_tests.begin(), found_tests.end(), [&](CPPUNIT_NS::Test *test) {
         CPPUNIT_ASSERT_EQUAL(false, test == nullptr);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
     moctest::FindTest test_finder;
     CPPUNIT_NS::Test *find_test = test_finder("TestFindRegTest::test_find_regtest",
-                                              CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
+                                              gsl::not_null<CPPUNIT_NS::Test *>(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest()));
     CPPUNIT_NS::TextUi::TestRunner runner;
     runner.addTest(find_test);
     runner.run(controller);

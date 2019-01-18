@@ -43,7 +43,7 @@ namespace moctest {
         }
 
         for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-            CPPUNIT_NS::Test *exists = operator()(test_name, test->getChildTestAt(i));
+            CPPUNIT_NS::Test *exists = operator()(test_name, gsl::not_null<CPPUNIT_NS::Test *>(test->getChildTestAt(i)));
 
             if (exists) {
                 return exists;

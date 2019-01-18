@@ -53,7 +53,7 @@ namespace moctest {
         }
 
         for (uint16_t i = 0; i < test->getChildTestCount(); ++i) {
-            operator()(sStr, test->getChildTestAt(i), tabs + (uint16_t) 1);
+            operator()(sStr, gsl::not_null<CPPUNIT_NS::Test *>(test->getChildTestAt(i)), tabs + (uint16_t) 1);
         }
 
         m_top_level = local_level;
