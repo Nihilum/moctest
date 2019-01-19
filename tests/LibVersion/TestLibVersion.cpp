@@ -46,7 +46,7 @@ void TestLibVersion::test_get_library_version_major() {
 }
 
 void TestLibVersion::test_get_library_version_minor() {
-    uint16_t expected_minor_version = 5;
+    uint16_t expected_minor_version = 6;
     CPPUNIT_ASSERT_EQUAL(expected_minor_version, moctest::get_library_version_minor());
 }
 
@@ -56,7 +56,7 @@ void TestLibVersion::test_get_library_version_patch() {
 }
 
 void TestLibVersion::test_get_library_version_string() {
-    const char *expected_version = "0.5.0";
+    const char *expected_version = "0.6.0";
     CPPUNIT_ASSERT_EQUAL(std::string(expected_version), std::string(moctest::get_library_version_string()));
 }
 
